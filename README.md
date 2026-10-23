@@ -26,8 +26,8 @@
 | `content/conferences.yaml` | ☀️ Conferences 会议 |
 | `content/publications.yaml` | ☀️ Publications 发表 |
 | `content/teaching.yaml` | ☀️ Teaching & Service 教学与服务 |
-| `content/ideas.yaml` | 🌙 Ideas 想法（卡片列表） |
-| `content/creations.yaml` | 🌙 Creations 创作（卡片列表） |
+| `content/ideas.yaml` | 🌙 Ideas 想法（塔罗牌，背面显示日期） |
+| `content/creations.yaml` | 🌙 Creations 创作（排成一本可以翻页的书） |
 | `content/footprints.yaml` | 🌙 Footprints 足迹星盘的地区和城市 |
 | `content/writing/` | Ideas 和 Creations 的全文（每篇一个 `.md` 文件） |
 

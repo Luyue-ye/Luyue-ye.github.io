@@ -54,11 +54,27 @@ function listSection(key, i) {
 const slugOf = f => String(f || '').split('/').pop().replace(/\.md$/i, '');
 const cardHTML = (it, key) => `<article class="card${it.file ? ' link' : ''}"${it.file ? ` tabindex="0" role="link" data-read="${key}" data-slug="${esc(slugOf(it.file))}"` : ''}>
   <div class="k">${md(it.label || it.date || '')}</div><h3>${md(it.title || '')}</h3>${it.summary ? `<p>${md(it.summary)}</p>` : ''}${it.file ? '<span class="more">阅读 · Read →</span>' : ''}</article>`;
-function ideasPage() { const d = C.ideas || {}; return head(0) + errBox('ideas') + intro(d) + `<div class="cards">${arr(d.items).map(it => cardHTML(it, 'ideas')).join('')}</div>`; }
+/* Ideas：塔罗牌。背面只显示日期，点一下翻开 */
+const roman = n => { const v = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]; let s = ''; for (const [a, r] of v) while (n >= a) { s += r; n -= a; } return s || '0'; };
+const TAROT_BACK = `<svg class="tb-art" viewBox="0 0 100 170" aria-hidden="true"><rect x="5" y="5" width="90" height="160" rx="5" fill="none" stroke="currentColor" stroke-width=".6"/><rect x="9" y="9" width="82" height="152" rx="3" fill="none" stroke="currentColor" stroke-width=".3" stroke-dasharray="1 2"/>
+  <g transform="translate(50 72)"><circle r="27" fill="none" stroke="currentColor" stroke-width=".35"/><circle r="31" fill="none" stroke="currentColor" stroke-width=".25" stroke-dasharray=".6 2.2"/>
+  ${Array.from({length: 24}, (_, i) => { const a = i * Math.PI / 12, r1 = 34, r2 = i % 2 ? 38 : 43; return `<line x1="${(r1 * Math.cos(a)).toFixed(1)}" y1="${(r1 * Math.sin(a)).toFixed(1)}" x2="${(r2 * Math.cos(a)).toFixed(1)}" y2="${(r2 * Math.sin(a)).toFixed(1)}" stroke="currentColor" stroke-width=".35"/>`; }).join('')}
+  <path d="M6 -18 A19 19 0 1 0 6 18 A15 15 0 1 1 6 -18Z" fill="currentColor" opacity=".9"/></g>
+  ${[[22,22],[78,22],[22,148],[78,148],[50,16],[50,154]].map(([x, y]) => `<path d="M${x} ${y - 3}Q${x} ${y} ${x + 3} ${y}Q${x} ${y} ${x} ${y + 3}Q${x} ${y} ${x - 3} ${y}Q${x} ${y} ${x} ${y - 3}Z" fill="currentColor"/>`).join('')}</svg>`;
+function ideasPage() {
+  const d = C.ideas || {}, items = arr(d.items), n = items.length;
+  return head(0) + errBox('ideas') + intro(d) + `<p class="tarot-hint">点一张牌，翻开它 · Tap a card to turn it over</p><div class="tarot-grid">${items.map((it, i) => `
+    <div class="tarot" role="button" tabindex="0" aria-label="${esc(it.date || '')}，翻开 Turn over">
+      <div class="in">
+        <div class="face back-face">${TAROT_BACK}<div class="tb-date">${md(it.date || '—')}</div></div>
+        <div class="face front-face"><div class="tf-num">${roman(n - i)}</div><h3>${md(it.title || '')}</h3>${it.summary ? `<p>${md(it.summary)}</p>` : ''}
+          ${it.file ? `<button class="tf-read" data-read="ideas" data-slug="${esc(slugOf(it.file))}">阅读全文 · Read →</button>` : ''}<div class="tf-date">${md(it.date || '')}</div></div>
+      </div></div>`).join('')}</div>`;
+}
 function creationsPage() {
   const d = C.creations || {};
-  return head(2) + errBox('creations') + intro(d) + arr(d.groups).map(g => `<div class="group"><h2>${md(g.title || '')}${g.zh ? ` <small>${esc(g.zh)}</small>` : ''}</h2>
-    <div class="cards">${arr(g.items).map(it => cardHTML(it, 'creations')).join('')}</div></div>`).join('');
+  return head(2) + errBox('creations') + intro(d) + `<div class="book-stage" id="bookStage"><p class="soon">…</p></div>
+    <div class="book-ctrl" id="bookCtrl" hidden><button id="bkPrev" aria-label="Previous page">‹</button><span id="bkNum"></span><button id="bkNext" aria-label="Next page">›</button><button id="bkToc">目录 · Contents</button></div>`;
 }
 function findWriting(key, slug) {
   const d = C[key] || {}, items = key === 'ideas' ? arr(d.items) : arr(d.groups).flatMap(g => arr(g.items));
@@ -122,6 +138,7 @@ function mountWaline() {
 
 function render() {
   if (window.stopMap) stopMap();
+  if (window.stopBook) stopBook();
   if (wl) { try { wl.destroy(); } catch (_) {} wl = null; }
   const m = $('#main');
   if (!loaded) { m.innerHTML = ''; return; }
@@ -132,13 +149,18 @@ function render() {
   m.querySelectorAll('[data-home]').forEach(b => (b.onclick = () => go(-1, b)));
   m.querySelectorAll('[data-sec]').forEach(b => (b.onclick = () => go(+b.dataset.sec, b, true)));
   m.querySelectorAll('[data-read]').forEach(c => {
-    const open = () => { reading = { key: c.dataset.read, slug: c.dataset.slug }; swap(); };
-    c.onclick = open; c.onkeydown = e => { if (e.key === 'Enter') open(); };
+    const open = e => { if (e) e.stopPropagation(); reading = { key: c.dataset.read, slug: c.dataset.slug }; swap(); };
+    c.onclick = open; c.onkeydown = e => { if (e.key === 'Enter') open(e); };
+  });
+  m.querySelectorAll('.tarot').forEach(t => {
+    const flip = () => t.classList.toggle('open');
+    t.onclick = flip; t.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === t) { e.preventDefault(); flip(); } };
   });
   document.querySelectorAll('nav .item').forEach((b, i) => { b.textContent = NAV[mode][i]; b.setAttribute('aria-current', String(i === view && !reading)); });
   if (reading) fillReader();
   if (mode === 'moon' && view === 1 && !reading) initMap();
   if (mode === 'moon' && view === 3 && !reading) mountWaline();
+  if (mode === 'moon' && view === 2 && !reading && window.initBook) initBook();
   setHash();
 }
 function setHash() {

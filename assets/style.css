@@ -115,3 +115,62 @@ p{margin:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 .astro-card .cp{margin-top:8px;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px}
+/* 🌙 Ideas 塔罗牌 */
+.tarot-hint{font:italic 16px var(--en);color:var(--muted);margin:-8px 0 24px}
+.tarot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:28px 22px}
+.tarot{perspective:1100px;aspect-ratio:7/12;width:100%;max-width:220px;justify-self:center;cursor:pointer;outline:none}
+.tarot .in{position:relative;width:100%;height:100%;transition:transform 1s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
+.tarot:not(.open):hover .in,.tarot:not(.open):focus-visible .in{transform:translateY(-6px)}
+.tarot.open .in{transform:rotateY(180deg)}
+.tarot .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;overflow:hidden}
+.back-face{background:#232A40;color:#D9CFA8;border:1px solid rgba(217,207,168,.28);box-shadow:0 10px 30px rgba(0,0,0,.25);transition:box-shadow .5s}
+.tarot:not(.open):hover .back-face,.tarot:focus-visible .back-face{box-shadow:0 10px 34px rgba(0,0,0,.3),0 0 28px rgba(236,232,221,.12)}
+.tb-art{position:absolute;inset:0;width:100%;height:100%}
+.tb-date{position:absolute;left:0;right:0;bottom:17%;text-align:center;font:italic 17px var(--en);letter-spacing:.06em;color:#E9E1C2}
+.front-face{transform:rotateY(180deg);background:#EFE9DC;color:#2B2A26;border:1px solid rgba(217,207,168,.5);padding:20px 16px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.front-face::before{content:"";position:absolute;inset:6px;border:.5px solid rgba(160,106,28,.4);border-radius:8px;pointer-events:none}
+.tf-num{font:italic 500 20px var(--en);color:#A06A1C;letter-spacing:.1em}
+.front-face h3{font:22px/1.35 var(--brush);color:#2B2A26}
+.front-face p{font:14px/1.75 var(--zh);color:#5B574E;overflow:hidden;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical}
+.tf-read{margin-top:auto;background:none;border:0;border-top:.5px solid rgba(160,106,28,.4);padding:8px 4px 0;font:italic 15px var(--en);color:#A06A1C;cursor:pointer}
+.tf-date{font:italic 13px var(--en);color:#8A8578}
+.front-face .tf-read+.tf-date{margin-top:0}
+.front-face :not(.tf-read)+.tf-date{margin-top:auto}
+/* 🌙 Creations 书 */
+.book-stage{display:flex;justify-content:center;padding:6px 0 10px;min-height:200px}
+#book{margin:0 auto}
+#book .page{background:#EFE9DC;color:#2B2A26;overflow:hidden}
+#book .page-in{position:absolute;inset:0}
+#book .page:not(.hard-page) .page-in{box-shadow:inset 0 0 40px rgba(120,96,50,.12)}
+#book .pg{position:absolute;top:40px;left:34px;right:34px;bottom:54px;overflow:hidden}
+@media (max-width:719px){#book .pg{left:26px;right:26px}}
+#book .flow{font-family:var(--zh);font-size:15.5px;line-height:1.95;color:#2B2A26}
+#book .flow p{margin:0 0 .9em;text-indent:2em}
+#book .flow h2{font:italic 500 20px var(--en);margin:.6em 0 .5em}
+#book .flow blockquote{margin:.8em 0;padding-left:14px;border-left:1px solid rgba(43,42,38,.2);color:#5B574E}
+#book .flow img{max-width:100%;border-radius:4px}
+#book .pg-num{position:absolute;left:0;right:0;bottom:20px;text-align:center;font:italic 13px var(--en);color:#8A8578}
+#book .hard-page{background:#2A3048;color:#ECE8DD}
+.cover{position:absolute;inset:14px;border:1px solid rgba(217,207,168,.35);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
+.cover::before{content:"";position:absolute;inset:6px;border:.5px dashed rgba(217,207,168,.3);border-radius:2px}
+.cv-orn{font-size:30px;color:#D9CFA8}
+.cv-t{font:italic 500 40px/1 var(--en);color:#ECE8DD}
+.cv-z{font:24px var(--brush);color:#D9CFA8}
+.cv-a{font:italic 18px var(--en);color:#A3A6B4;margin-top:24px}
+.tp{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px}
+.tp-g{font:italic 15px var(--en);color:#8A8578}
+.tp-l{font:13px var(--zh);color:#A06A1C}
+.tp-t{font:30px/1.4 var(--brush);color:#2B2A26}
+.tp-s{font:15px/1.9 var(--zh);color:#5B574E;max-width:28em}
+.tp-open{margin-top:10px;background:none;border:0;font:italic 15px var(--en);color:#A06A1C;cursor:pointer;text-decoration:underline;text-decoration-thickness:.5px;text-underline-offset:4px}
+.toc-h{font:italic 500 24px var(--en);text-align:center;margin:10px 0 22px}
+.toc-g{font:italic 16px var(--en);color:#8A8578;margin:14px 0 6px;border-bottom:.5px solid rgba(43,42,38,.15);padding-bottom:4px}
+.toc-i{display:flex;align-items:baseline;gap:8px;text-decoration:none;color:#2B2A26;font:16px/2 var(--zh)}
+.toc-i span{flex:1;min-width:0}.toc-i i{font:italic 14px var(--en);color:#8A8578}
+.toc-i:hover span{color:#A06A1C}
+.book-ctrl{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:14px;font:italic 16px var(--en);color:var(--muted)}
+.book-ctrl button{background:none;border:0;color:var(--muted);font:italic 18px var(--en);cursor:pointer;padding:4px 8px}
+.book-ctrl button:hover{color:var(--ink)}
+.book-ctrl #bkToc{font-size:15px;font-family:var(--zh)}
+#book .--left:not(.hard-page) .page-in{box-shadow:inset -22px 0 26px -18px rgba(80,60,30,.28),inset 0 0 40px rgba(120,96,50,.1)}
+#book .--right:not(.hard-page) .page-in{box-shadow:inset 22px 0 26px -18px rgba(80,60,30,.28),inset 0 0 40px rgba(120,96,50,.1)}
