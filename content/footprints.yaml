@@ -1,52 +1,78 @@
 # ─────────────────────────────────────────────
 # 🌙 Footprints · 足迹星盘
 #
-# regions：地区，每个地区在星盘上是一个“星座”，也是右边列表的一组
+# regions：国家，每个国家在星盘上是一个“星座”，也是右边列表的一组
 # places：每个地点是一颗星星
 #   name:   名字（中文）
 #   en:     英文名
-#   region: 属于哪个地区（要和上面 regions 里的 name 一样；写一个新名字会自动变成新地区）
+#   region: 属于哪个国家（要和上面 regions 里的 name 一样；写一个新名字会自动变成新的一组）
 #   coords: 坐标，"纬度, 经度"。在 Google 地图上右键点那个地方，第一行就是坐标，直接复制过来
 #   note:   可选，卡片上的小标注，比如 家乡
 #   home:   可选，写 true 会变成带星芒的大星星
 #   photo:  可选，照片，例如 "images/chengdu.jpg"
 #   text:   可选，卡片上的一两句话
 #
-# 同一个地区里，星星按这里的先后顺序连线
-# 加一个新地点：复制一段 "- name: ..." 改成新的信息，放到同地区的地点后面
+# 同一个国家里，星星按这里的先后顺序连线
+# 加一个新地点：复制一段 "- name: ..." 改成新的信息，放到同一个国家的地点后面
 # ─────────────────────────────────────────────
-intro: "去过的城市是一颗颗星星，按地区连成星座。拖动可以转动星盘，点一颗星，或在右边选一座城市。"
+intro: "去过的城市是一颗颗星星，按国家连成星座。拖动可以转动星盘，点一颗星，或在右边选一座城市。"
 
 regions:
-  - name: "西南"
-    en: "Southwest China"
-  - name: "西藏"
-    en: "Tibet"
-  - name: "长江中下游"
-    en: "Along the Yangtze"
-  - name: "华北"
-    en: "North China"
-  - name: "岭南"
-    en: "Lingnan"
+  - name: "中国"
+    en: "China"
   - name: "韩国"
-    en: "Korea"
-  - name: "关西"
-    en: "Kansai"
-  - name: "北欧与波罗的海"
-    en: "Nordic and Baltic"
+    en: "South Korea"
+  - name: "日本"
+    en: "Japan"
+  - name: "挪威"
+    en: "Norway"
+  - name: "丹麦"
+    en: "Denmark"
+  - name: "瑞典"
+    en: "Sweden"
+  - name: "爱沙尼亚"
+    en: "Estonia"
   - name: "土耳其"
     en: "Türkiye"
-  - name: "中东"
-    en: "Middle East"
+  - name: "卡塔尔"
+    en: "Qatar"
   - name: "美国"
     en: "United States"
 
 places:
 
-  # 西南
+  # 中国
+  - name: "顺德"
+    en: "Shunde"
+    region: "中国"
+    coords: "22.81, 113.29"
+  - name: "广州"
+    en: "Guangzhou"
+    region: "中国"
+    coords: "23.13, 113.26"
+  - name: "昆明"
+    en: "Kunming"
+    region: "中国"
+    coords: "24.88, 102.83"
+  - name: "大理"
+    en: "Dali"
+    region: "中国"
+    coords: "25.61, 100.27"
+  - name: "丽江"
+    en: "Lijiang"
+    region: "中国"
+    coords: "26.87, 100.23"
+  - name: "日喀则"
+    en: "Shigatse"
+    region: "中国"
+    coords: "29.27, 88.88"
+  - name: "拉萨"
+    en: "Lhasa"
+    region: "中国"
+    coords: "29.65, 91.13"
   - name: "成都"
     en: "Chengdu"
-    region: "西南"
+    region: "中国"
     coords: "30.67, 104.07"
     note: "家乡 · Hometown"
     home: true
@@ -54,72 +80,36 @@ places:
     text: "（示例）在这里写几句关于成都的话"
   - name: "重庆"
     en: "Chongqing"
-    region: "西南"
+    region: "中国"
     coords: "29.56, 106.55"
-  - name: "昆明"
-    en: "Kunming"
-    region: "西南"
-    coords: "24.88, 102.83"
-  - name: "大理"
-    en: "Dali"
-    region: "西南"
-    coords: "25.61, 100.27"
-  - name: "丽江"
-    en: "Lijiang"
-    region: "西南"
-    coords: "26.87, 100.23"
-
-  # 西藏
-  - name: "拉萨"
-    en: "Lhasa"
-    region: "西藏"
-    coords: "29.65, 91.13"
-  - name: "日喀则"
-    en: "Shigatse"
-    region: "西藏"
-    coords: "29.27, 88.88"
-
-  # 长江中下游
   - name: "武汉"
     en: "Wuhan"
-    region: "长江中下游"
+    region: "中国"
     coords: "30.59, 114.31"
-  - name: "南京"
-    en: "Nanjing"
-    region: "长江中下游"
-    coords: "32.06, 118.8"
-  - name: "苏州"
-    en: "Suzhou"
-    region: "长江中下游"
-    coords: "31.3, 120.62"
-  - name: "上海"
-    en: "Shanghai"
-    region: "长江中下游"
-    coords: "31.23, 121.47"
-
-  # 华北
   - name: "石家庄"
     en: "Shijiazhuang"
-    region: "华北"
+    region: "中国"
     coords: "38.04, 114.51"
   - name: "北京"
     en: "Beijing"
-    region: "华北"
+    region: "中国"
     coords: "39.9, 116.4"
   - name: "承德"
     en: "Chengde"
-    region: "华北"
+    region: "中国"
     coords: "40.95, 117.96"
-
-  # 岭南
-  - name: "广州"
-    en: "Guangzhou"
-    region: "岭南"
-    coords: "23.13, 113.26"
-  - name: "顺德"
-    en: "Shunde"
-    region: "岭南"
-    coords: "22.81, 113.29"
+  - name: "南京"
+    en: "Nanjing"
+    region: "中国"
+    coords: "32.06, 118.8"
+  - name: "苏州"
+    en: "Suzhou"
+    region: "中国"
+    coords: "31.3, 120.62"
+  - name: "上海"
+    en: "Shanghai"
+    region: "中国"
+    coords: "31.23, 121.47"
 
   # 韩国
   - name: "仁川"
@@ -127,48 +117,54 @@ places:
     region: "韩国"
     coords: "37.46, 126.71"
 
-  # 关西
+  # 日本
   - name: "神户"
     en: "Kobe"
-    region: "关西"
+    region: "日本"
     coords: "34.69, 135.2"
   - name: "大阪"
     en: "Osaka"
-    region: "关西"
+    region: "日本"
     coords: "34.69, 135.5"
   - name: "奈良"
     en: "Nara"
-    region: "关西"
+    region: "日本"
     coords: "34.69, 135.8"
   - name: "宇治"
     en: "Uji"
-    region: "关西"
+    region: "日本"
     coords: "34.88, 135.8"
   - name: "京都"
     en: "Kyoto"
-    region: "关西"
+    region: "日本"
     coords: "35.01, 135.77"
 
-  # 北欧与波罗的海
+  # 挪威
   - name: "奥斯陆"
     en: "Oslo"
-    region: "北欧与波罗的海"
+    region: "挪威"
     coords: "59.91, 10.75"
+
+  # 丹麦
   - name: "哥本哈根"
     en: "Copenhagen"
-    region: "北欧与波罗的海"
+    region: "丹麦"
     coords: "55.68, 12.57"
+
+  # 瑞典
   - name: "隆德"
     en: "Lund"
-    region: "北欧与波罗的海"
+    region: "瑞典"
     coords: "55.7, 13.19"
   - name: "斯德哥尔摩"
     en: "Stockholm"
-    region: "北欧与波罗的海"
+    region: "瑞典"
     coords: "59.33, 18.07"
+
+  # 爱沙尼亚
   - name: "塔林"
     en: "Tallinn"
-    region: "北欧与波罗的海"
+    region: "爱沙尼亚"
     coords: "59.44, 24.75"
 
   # 土耳其
@@ -177,10 +173,10 @@ places:
     region: "土耳其"
     coords: "41.01, 28.98"
 
-  # 中东
+  # 卡塔尔
   - name: "卡塔尔"
     en: "Qatar"
-    region: "中东"
+    region: "卡塔尔"
     coords: "25.29, 51.53"
 
   # 美国

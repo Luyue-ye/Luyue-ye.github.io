@@ -28,7 +28,7 @@
 | `content/teaching.yaml` | ☀️ Teaching & Service 教学与服务 |
 | `content/ideas.yaml` | 🌙 Ideas 想法（塔罗牌，背面显示日期） |
 | `content/creations.yaml` | 🌙 Creations 创作（处女座星座：每颗亮星是一个分类，最多 13 个） |
-| `content/footprints.yaml` | 🌙 Footprints 足迹星盘的地区和城市 |
+| `content/footprints.yaml` | 🌙 Footprints 足迹星盘的国家和城市 |
 | `content/writing/` | Ideas 和 Creations 的全文（每篇一个 `.md` 文件） |
 
 每个文件开头都有中文说明，写了每一项是什么意思。
@@ -71,17 +71,17 @@
 
 ## 六、在星盘上加一个地方
 
-打开 `content/footprints.yaml`，在同一地区的城市后面复制一段：
+打开 `content/footprints.yaml`，在同一个国家的城市后面复制一段：
 
 ```yaml
-  - name: "冰岛"
+  - name: "雷克雅未克"
     en: "Reykjavík"
-    region: "北欧与波罗的海"
+    region: "冰岛"
     coords: "64.15, -21.94"
 ```
 
 - 坐标：在 Google 地图上**右键**点那个地方，菜单第一行就是坐标，点一下就复制了，粘贴到 `coords` 的引号里
-- `region` 写一个新名字，就会自动多出一个新星座
+- `region` 写国家名。写一个新国家（比如“冰岛”），就会自动多出一组；也可以在 `regions` 里给它加上英文名
 - 可选：`photo`（照片）、`text`（一两句话）、`note`（小标注）、`home: true`（变成大星星）
 
 ## 七、网址小技巧

@@ -17,7 +17,7 @@ function initMap(){
   const toBottom=lon=>{proj.rotate([lam,-90]);return lam+norm(Math.PI/2-angOf(lon))/(sgn*D);};
   const homes=Object.keys(PL).filter(n=>PL[n].home);lam=toBottom(homes.length?PL[homes[0]].lon:110);
   function hit(x,y){let best=null,bd=13;pts.forEach(q=>{const d=Math.hypot(q.x-x,q.y-y);if(d<bd){bd=d;best=q;}});return best;}
-  function select(n){sel=sel===n?null:n;btns.forEach(b=>b.classList.toggle('on',b.dataset.city===sel));if(sel)anim={t0:performance.now(),from:lam,to:toBottom(PL[sel].lon)};}
+  function select(n){sel=sel===n?null:n;btns.forEach(b=>b.classList.toggle('on',b.dataset.city===sel));if(sel){const b=btns.find(x=>x.dataset.city===sel),ac=b&&b.parentElement;if(ac&&ac.hidden){ac.hidden=false;ac.previousElementSibling.setAttribute('aria-expanded','true');}}if(sel)anim={t0:performance.now(),from:lam,to:toBottom(PL[sel].lon)};}
   function card(){const n=sel||(hover&&hover.n);if(!n){cardEl.hidden=true;shown=null;return;}
     const q=pts.find(p=>p.n===n);if(!q){cardEl.hidden=true;return;}
     if(shown!==n){const p=PL[n],g=GROUPS.find(g=>g.c.includes(n))||{zh:'',en:''},near=pts.filter(q2=>q2.n!==n&&Math.hypot(q2.x-q.x,q2.y-q.y)<12).map(q2=>q2.n);

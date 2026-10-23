@@ -135,7 +135,7 @@ function footprintsPage() {
   const d = C.footprints || {}, F = (window.FP = fpData());
   return head(1) + errBox('footprints') + intro(d) + `<div class="astro-wrap"><div id="astro" class="astro">
     <canvas id="astroCv" role="img" aria-label="An astrolabe-style star map of places Lulu has visited"></canvas><div id="astroCard" class="astro-card" hidden></div></div>
-    <aside class="astro-list">${F.groups.map(g => `<div class="ag"><h3>${esc(g.zh)} <span>${esc(g.en)}</span></h3><div class="ac">${g.c.map(n => `<button data-city="${esc(n)}">${esc(n)}</button>`).join('')}</div></div>`).join('')}</aside></div>`;
+    <aside class="astro-list">${F.groups.map(g => `<div class="ag"><button class="ag-h" aria-expanded="false"><span class="z">${esc(g.zh)}</span> <span class="e">${esc(g.en)}</span><span class="n">${g.c.length}</span></button><div class="ac" hidden>${g.c.map(n => `<button data-city="${esc(n)}">${esc(n)}</button>`).join('')}</div></div>`).join('')}</aside></div>`;
 }
 function echoesPage() {
   const e = (C.site || {}).echoes || {};
@@ -181,7 +181,10 @@ function render() {
   });
   document.querySelectorAll('nav .item').forEach((b, i) => { b.textContent = NAV[mode][i]; b.setAttribute('aria-current', String(i === view)); });
   if (reading) { const it = findWriting(reading.key, reading.slug); if (it) fillPaged(it, reading); }
-  if (mode === 'moon' && view === 1 && !reading) initMap();
+  if (mode === 'moon' && view === 1 && !reading) {
+    m.querySelectorAll('.ag-h').forEach(b => (b.onclick = () => { const open = b.getAttribute('aria-expanded') !== 'true'; b.setAttribute('aria-expanded', String(open)); b.nextElementSibling.hidden = !open; }));
+    initMap();
+  }
   if (mode === 'moon' && view === 3 && !reading) mountWaline();
   if (mode === 'moon' && view === 2 && !reading) mountBook();
 }
