@@ -4,7 +4,7 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SEC = { sun: ['focus', 'conferences', 'publications', 'teaching'], moon: ['ideas', 'footprints', 'creations', 'echoes'] };
 const NAV = { sun: ['Focus', 'Conferences', 'Publications', 'Teaching & Service'], moon: ['Ideas', 'Footprints', 'Creations', 'Echoes'] };
 const ZH = { sun: ['研究', '会议', '发表', '教学与服务'], moon: ['想法', '足迹', '创作', '回声'] };
-let mode = 'sun', view = -1, reading = null, busy = false, C = {}, wl = null, loaded = false;
+let mode = 'sun', view = -1, reading = null, book = null, busy = false, C = {}, wl = null, loaded = false, depth = 0;
 
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const md = s => (window.marked ? marked.parseInline(String(s ?? '')) : esc(s));
@@ -71,15 +71,7 @@ function ideasPage() {
           ${it.file ? `<button class="tf-read" data-read="ideas" data-slug="${esc(slugOf(it.file))}">阅读全文 · Read →</button>` : ''}<div class="tf-date">${md(it.date || '')}</div></div>
       </div></div>`).join('')}</div>`;
 }
-function creationsPage() {
-  const d = C.creations || {};
-  return head(2) + errBox('creations') + intro(d) + `<div class="book-stage" id="bookStage"><p class="soon">…</p></div>
-    <div class="book-ctrl" id="bookCtrl" hidden><button id="bkPrev" aria-label="Previous page">‹</button><span id="bkNum"></span><button id="bkNext" aria-label="Next page">›</button><button id="bkToc">目录 · Contents</button></div>`;
-}
-function findWriting(key, slug) {
-  const d = C[key] || {}, items = key === 'ideas' ? arr(d.items) : arr(d.groups).flatMap(g => arr(g.items));
-  return items.find(it => slugOf(it.file) === slug);
-}
+function findWriting(key, slug) { return arr((C.ideas || {}).items).find(it => slugOf(it.file) === slug); }
 function readerPage() {
   const { key, slug } = reading, it = findWriting(key, slug), i = SEC.moon.indexOf(key);
   if (!it) return `<button class="back" data-sec="${i}">← ${NAV.moon[i]}</button><p class="soon">找不到这篇文章 · Not found</p>`;
@@ -144,30 +136,67 @@ function render() {
   if (!loaded) { m.innerHTML = ''; return; }
   const P = { sun: [() => listSection('focus', 0), () => listSection('conferences', 1), () => listSection('publications', 2), () => listSection('teaching', 3)],
               moon: [ideasPage, footprintsPage, creationsPage, echoesPage] };
-  m.innerHTML = reading ? readerPage() : view < 0 ? (mode === 'sun' ? homeSun() : homeMoon()) : P[mode][view]();
+  const inner = reading ? readerPage() : view < 0 ? (mode === 'sun' ? homeSun() : homeMoon()) : P[mode][view]();
+  const showBar = view >= 0 || reading || depth > 0;
+  m.innerHTML = inner + (showBar ? `<div class="backbar"><button data-goback>← 返回上一页 · Back</button><button data-top>↑ 回到顶部 · Top</button></div>` : '');
   m.querySelectorAll('img[data-ph]').forEach(img => { img.onerror = () => { const d = document.createElement('div'); d.className = 'photo ph'; d.innerHTML = img.dataset.ph; img.replaceWith(d); }; });
   m.querySelectorAll('[data-home]').forEach(b => (b.onclick = () => go(-1, b)));
   m.querySelectorAll('[data-sec]').forEach(b => (b.onclick = () => go(+b.dataset.sec, b, true)));
+  m.querySelectorAll('[data-goback]').forEach(b => (b.onclick = goBack));
+  m.querySelectorAll('[data-top]').forEach(b => (b.onclick = () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })));
   m.querySelectorAll('[data-read]').forEach(c => {
-    const open = e => { if (e) e.stopPropagation(); reading = { key: c.dataset.read, slug: c.dataset.slug }; swap(); };
+    const open = e => { if (e) e.stopPropagation(); reading = { key: c.dataset.read, slug: c.dataset.slug }; book = null; swap(); commit(); };
     c.onclick = open; c.onkeydown = e => { if (e.key === 'Enter') open(e); };
   });
   m.querySelectorAll('.tarot').forEach(t => {
     const flip = () => t.classList.toggle('open');
     t.onclick = flip; t.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === t) { e.preventDefault(); flip(); } };
   });
-  document.querySelectorAll('nav .item').forEach((b, i) => { b.textContent = NAV[mode][i]; b.setAttribute('aria-current', String(i === view && !reading)); });
+  document.querySelectorAll('nav .item').forEach((b, i) => { b.textContent = NAV[mode][i]; b.setAttribute('aria-current', String(i === view)); });
   if (reading) fillReader();
   if (mode === 'moon' && view === 1 && !reading) initMap();
   if (mode === 'moon' && view === 3 && !reading) mountWaline();
-  if (mode === 'moon' && view === 2 && !reading && window.initBook) initBook();
-  setHash();
+  if (mode === 'moon' && view === 2 && !reading) mountBook();
 }
-function setHash() {
-  const t = reading ? `${reading.key}/${reading.slug}` : view < 0 ? (mode === 'moon' ? 'moon' : '') : SEC[mode][view];
-  try { history.replaceState(null, '', t ? '#' + t : location.pathname + location.search); } catch (_) {}
+
+/* 网址与“返回上一页”：每次跳转都记进浏览器历史，所以浏览器的后退键也能用 */
+function stateHash() {
+  if (reading) return `${reading.key}/${reading.slug}`;
+  if (view < 0) return mode === 'moon' ? 'moon' : '';
+  const s = SEC[mode][view];
+  if (s === 'creations' && book) return `creations/${book.id}` + (book.slug ? `/${book.slug}` + (book.page ? `/${book.page + 1}` : '') : '');
+  return s;
 }
-function swap(effect) {
+const urlFor = t => (t ? '#' + t : location.pathname + location.search);
+function commit() { try { history.pushState({ d: ++depth }, '', urlFor(stateHash())); } catch (_) {} }
+function replaceHash() { try { history.replaceState({ d: depth }, '', urlFor(stateHash())); } catch (_) {} }
+function parseHash(t) {
+  const [sec, a, b, c] = decodeURIComponent(t).split('/');
+  const s = { mode: 'sun', view: -1, reading: null, book: null };
+  if (t === 'moon') s.mode = 'moon';
+  else if (SEC.sun.includes(sec)) s.view = SEC.sun.indexOf(sec);
+  else if (SEC.moon.includes(sec)) {
+    s.mode = 'moon'; s.view = SEC.moon.indexOf(sec);
+    if (sec === 'ideas' && a) s.reading = { key: 'ideas', slug: a };
+    if (sec === 'creations' && a) s.book = { id: a, slug: b || null, page: c ? Math.max(0, (+c || 1) - 1) : 0 };
+  }
+  return s;
+}
+function goBack() {
+  if (depth > 0) { history.back(); return; }
+  if (book && book.slug) navBook({ id: book.id, slug: null, page: 0 });
+  else if (book) navBook(null);
+  else if (reading) { reading = null; swap(); commit(); }
+  else go(-1);
+}
+addEventListener('popstate', e => {
+  depth = (e.state && e.state.d) || 0;
+  const s = parseHash(location.hash.slice(1));
+  if (s.mode !== mode) switchMode(s.mode === 'moon', () => { view = s.view; reading = s.reading; book = s.book; });
+  else { view = s.view; reading = s.reading; book = s.book; swap(); }
+});
+function navBook(b) { book = b; reading = null; swap(); commit(); }
+function swap() {
   const m = $('#main'), moon = mode === 'moon';
   m.classList.add('fade'); if (moon && !reduce) m.style.filter = 'blur(8px)';
   setTimeout(() => {
@@ -177,10 +206,10 @@ function swap(effect) {
   }, 300);
 }
 function go(i, el, force) {
-  if (busy || (i === view && !reading && !force)) return;
+  if (busy || (i === view && !reading && !book && !force)) return;
   const moon = mode === 'moon';
   if (el && window.navFx) { const r = el.getBoundingClientRect(); navFx(r.left + r.width / 2, r.top + r.height / 2); }
-  if (el && !moon && !reduce) {
+  if (el && !moon && !reduce && el.closest('nav')) {
     const d = $('#ndm'), tb = $('#ntb'), t0 = performance.now(); el.style.filter = 'url(#wavenav)';
     (function f(n) {
       const k = Math.min(1, (n - t0) / 1600);
@@ -189,7 +218,7 @@ function go(i, el, force) {
       if (k < 1) requestAnimationFrame(f); else { d.setAttribute('scale', 0); el.style.filter = ''; }
     })(t0);
   }
-  view = i; reading = null; swap();
+  view = i; reading = null; book = null; swap(); commit();
 }
 document.querySelectorAll('nav .item').forEach(b => (b.onclick = () => go(+b.dataset.i, b)));
 
@@ -220,28 +249,29 @@ function setDecor(toMoon) {
   $('#hint').textContent = toMoon ? '☀ back to daylight' : '☾ step into the night';
   $('#toggle').setAttribute('aria-label', toMoon ? 'Switch to the sun side' : 'Switch to the moon side');
 }
-function toggle() {
-  if (busy) return; busy = true; const toMoon = mode === 'sun';
+function switchMode(toMoon, setState) {
+  if (busy) return; busy = true;
   document.documentElement.classList.toggle('moon', toMoon);
   $('#disc').setAttribute('fill', toMoon ? '#4A5068' : '#F0C46B'); $('#stars').style.opacity = toMoon ? 1 : 0;
   ripple(toMoon ? '#A3A6B4' : '#C9A04A');
   const m = $('#main'), items = document.querySelectorAll('nav .item');
   m.classList.add('fade'); items.forEach(b => (b.style.opacity = 0));
   setTimeout(() => {
-    mode = toMoon ? 'moon' : 'sun'; reading = null; render(); m.classList.remove('fade'); items.forEach(b => (b.style.opacity = 1));
-    setDecor(toMoon);
+    mode = toMoon ? 'moon' : 'sun'; reading = null; book = null; if (setState) setState();
+    render(); m.classList.remove('fade'); items.forEach(b => (b.style.opacity = 1)); setDecor(toMoon);
   }, reduce ? 0 : 600);
   toMoon ? eclipse(330, 122, () => (busy = false)) : eclipse(122, -140, () => { $('#sh').setAttribute('cx', 330); busy = false; });
 }
+function toggle() { if (busy) return; switchMode(mode === 'sun'); commitLater(); }
+function commitLater() { setTimeout(commit, reduce ? 0 : 620); }
 $('#toggle').onclick = toggle; $('#hint').onclick = toggle;
 
-/* 打开网页时：读取内容，并根据网址里的 #focus、#ideas 等直接打开对应栏目 */
+/* 打开网页时：读取内容，并根据网址（#focus、#ideas、#creations/fiction 等）直接打开对应页面 */
 (async function boot() {
-  const t = decodeURIComponent(location.hash.slice(1));
-  const [sec, slug] = t.split('/');
-  if (SEC.moon.includes(sec) || t === 'moon') { mode = 'moon'; setDecor(true); $('#sh').setAttribute('cx', 122); }
+  const s = parseHash(location.hash.slice(1));
+  if (s.mode === 'moon') { mode = 'moon'; setDecor(true); $('#sh').setAttribute('cx', 122); }
+  view = s.view; reading = s.reading; book = s.book;
+  try { history.replaceState({ d: 0 }, '', location.href); } catch (_) {}
   await loadContent();
-  if (SEC[mode].includes(sec)) view = SEC[mode].indexOf(sec);
-  if (slug && (sec === 'ideas' || sec === 'creations')) reading = { key: sec, slug };
   render();
 })();

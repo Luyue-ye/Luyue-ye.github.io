@@ -1,28 +1,47 @@
 # ─────────────────────────────────────────────
 # 🌙 Creations · 创作
-# 这里的作品会被排成一本可以翻页的书：封面 → 目录 → 每篇作品（标题页 + 正文，自动分页）
-# 按这里的先后顺序排进书里：
-#   label:   卡片上方的小字（体裁、获奖信息等）
-#   title:   作品名
-#   summary: 简介或开头一两句
-#   file:    全文所在的文件（放在 content/writing/creations/ 里）
+# 三本书并排放在书架上：小说、散文、未分类
+# 点开一本书 → 目录 → 点目录里的篇名进入正文（正文会按书页自动分页）
+#
+# 每本书：
+#   id:    书的代号（英文，用在网址里，不要改）
+#   title: 封面上的英文名
+#   zh:    封面上的中文名
+#   items: 这本书里的作品，按这里的先后顺序排进目录
+#
+# 每篇作品：
+#   label:   标题页上方的小字（获奖信息、写作时间等）
+#   title:   篇名
+#   summary: 标题页上的简介或一两句开头
+#   file:    全文所在的文件（放在 content/writing/creations/ 里的 .md 文件）
+#            不写 file 就只有标题页
 # ─────────────────────────────────────────────
 intro: ""
-groups:
-  - title: "Fiction"
+books:
+  - id: "fiction"
+    title: "Fiction"
     zh: "小说"
     items:
       - label: "短篇小说 · 获奖作品（示例）"
         title: "《篇名》"
-        summary: "获奖信息与一段节选，读者可以点开读全文。"
+        summary: "获奖信息与一段节选。"
         file: "content/writing/creations/example.md"
       - label: "短篇小说（示例）"
-        title: "《篇名》"
+        title: "《篇名二》"
         summary: "作品简介或开头几段。"
 
-  - title: "Other works"
-    zh: "其他创作"
+  - id: "essays"
+    title: "Essays"
+    zh: "散文"
     items:
-      - label: "诗 / 散文 / 其他（示例）"
+      - label: "散文（示例）"
+        title: "《散文篇名》"
+        summary: "一段散文的开头。"
+
+  - id: "misc"
+    title: "Uncategorized"
+    zh: "未分类"
+    items:
+      - label: "诗 / 片段 / 其他（示例）"
         title: "作品名"
         summary: "任何你想展示的创作。"

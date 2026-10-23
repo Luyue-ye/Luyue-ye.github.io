@@ -27,7 +27,7 @@
 | `content/publications.yaml` | ☀️ Publications 发表 |
 | `content/teaching.yaml` | ☀️ Teaching & Service 教学与服务 |
 | `content/ideas.yaml` | 🌙 Ideas 想法（塔罗牌，背面显示日期） |
-| `content/creations.yaml` | 🌙 Creations 创作（排成一本可以翻页的书） |
+| `content/creations.yaml` | 🌙 Creations 创作（书架上的三本书：小说、散文、未分类） |
 | `content/footprints.yaml` | 🌙 Footprints 足迹星盘的地区和城市 |
 | `content/writing/` | Ideas 和 Creations 的全文（每篇一个 `.md` 文件） |
 
@@ -62,9 +62,10 @@
 1. 进入 `content/writing/ideas`（小说放 `content/writing/creations`）
 2. **Add file → Create new file**，文件名用英文，例如 `moon-notes.md`
 3. 第一行写 `# 标题`，下面空一行开始写正文；空一行就是新的一段
-4. 打开 `content/ideas.yaml`，加一张卡片，`file` 写 `"content/writing/ideas/moon-notes.md"`
+4. 打开 `content/ideas.yaml`，在最上面加一张牌，`file` 写 `"content/writing/ideas/moon-notes.md"`
+5. 小说、散文：打开 `content/creations.yaml`，在对应那本书（fiction 小说 / essays 散文 / misc 未分类）的 `items` 下面加一篇，`file` 写 `"content/writing/creations/文件名.md"`。正文会按书页自动分页
 
-每篇文章都有自己的网址，例如 `https://luyue-ye.github.io/#ideas/moon-notes`，可以直接分享。
+每篇文章都有自己的网址，例如 `https://luyue-ye.github.io/#ideas/moon-notes`、`https://luyue-ye.github.io/#creations/fiction/文件名`，可以直接分享。
 
 ## 六、在星盘上加一个地方
 
