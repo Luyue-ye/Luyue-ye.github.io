@@ -1,0 +1,28 @@
+# ─────────────────────────────────────────────
+# ☀️ Teaching & Service · 教学与服务
+# ─────────────────────────────────────────────
+intro: ""
+groups:
+  - title: "Teaching"
+    zh: "教学"
+    items:
+      - when: "Fall 2026"
+        title: "SCOMM 1000 · Human Communication"
+        text: "（示例）Georgia State University · your role and a sentence about the course"
+
+  - title: "Service"
+    zh: "服务"
+    items:
+      - when: "Current"
+        title: "Treasurer, CGSA"
+        text: "（示例）A sentence about the organization and your work there"
+      - when: "Year"
+        title: "（示例）Reviewer / panel organizer"
+        text: "（示例）Other academic service"
+
+  - title: "CV"
+    items:
+      - when: "PDF"
+        title: "Curriculum vitae"
+        text: "（示例）把 CV 上传到 files 文件夹后，在下面 link 里填 files/文件名.pdf"
+        link: ""

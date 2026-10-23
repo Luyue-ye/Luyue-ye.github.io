@@ -1,0 +1,27 @@
+# ─────────────────────────────────────────────
+# ☀️ Conferences · 会议
+# 每个年份是一组，组里每一条是一次报告
+#   when:  日期
+#   title: 报告题目
+#   text:  会议名称 · 地点
+#   link:  可选，会议或报告的网址
+# ─────────────────────────────────────────────
+intro: ""
+groups:
+  - title: "2027"
+    items:
+      - when: "2027"
+        title: "（示例）Paper title"
+        text: "International Studies Association (ISA) Annual Convention · Atlanta, GA"
+      - when: "2027"
+        title: "（示例）Paper title"
+        text: "ISA midyear conference · Reykjavík, Iceland"
+
+  - title: "2026"
+    items:
+      - when: "Nov 2026"
+        title: "（示例）Paper title"
+        text: "National Communication Association (NCA) Annual Convention · New Orleans, LA"
+      - when: "2026"
+        title: "（示例）Paper title"
+        text: "European Communication Conference (ECC) · Brno, Czech Republic"

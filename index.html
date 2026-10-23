@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lulu</title>
+<meta name="description" content="Lulu — PhD student in Communication at Georgia State University. Research on diaspora media, cyberpolitics, and the transnational public sphere.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%23F0C46B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Ma+Shan+Zheng&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-light.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.6.0/dist/waline.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="liq" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence id="tb" type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="3" result="n"/><feDisplacementMap id="dm" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>
+  <filter id="wavenav" x="-25%" y="-60%" width="150%" height="220%"><feTurbulence id="ntb" type="fractalNoise" baseFrequency="0.05 0.18" numOctaves="2" seed="8" result="n"/><feDisplacementMap id="ndm" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>
+</svg>
+<div class="wrap">
+<nav aria-label="Main">
+  <button class="item i0" data-i="0">Focus</button>
+  <button class="item i1" data-i="1">Conferences</button>
+  <div class="center">
+    <button id="toggle" aria-label="Switch to the moon side">
+      <svg viewBox="0 0 200 200" width="150" height="150" aria-hidden="true">
+        <defs><mask id="mk"><rect x="-60" y="-60" width="320" height="320" fill="white"/><circle id="sh" cx="330" cy="89" r="44" fill="black"/></mask></defs>
+        <g id="rip" fill="none"></g>
+        <g filter="url(#liq)">
+          <g id="stars" style="opacity:0;transition:opacity 1.2s .5s"></g>
+          <circle id="disc" cx="100" cy="100" r="44" fill="#F0C46B" mask="url(#mk)" style="transition:fill 1.4s"/>
+        </g>
+      </svg>
+      <span class="name">Lulu</span>
+    </button>
+    <button class="hint" id="hint">☾ step into the night</button>
+  </div>
+  <button class="item i2" data-i="2">Publications</button>
+  <button class="item i3" data-i="3">Teaching &amp; Service</button>
+</nav>
+<main id="main" aria-live="polite"></main>
+<div class="phases" id="phases" aria-hidden="true"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@15.0.0/marked.min.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/sky.js"></script>
+<script src="assets/map.js"></script>
+</body>
+</html>

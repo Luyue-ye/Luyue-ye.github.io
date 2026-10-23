@@ -1,0 +1,22 @@
+# ─────────────────────────────────────────────
+# 🌙 Ideas · 想法（随笔、读书笔记）
+# 每一篇是一张卡片：
+#   date:    日期
+#   title:   标题
+#   summary: 卡片上显示的一两句
+#   file:    全文所在的文件（放在 content/writing/ideas/ 里的 .md 文件）
+#            不写 file 就只有卡片，不能点开
+# 新写一篇：在 content/writing/ideas/ 里新建一个 .md 文件写正文，再在这里加一张卡片
+# ─────────────────────────────────────────────
+intro: ""
+items:
+  - date: "2026 · 10"
+    title: "（示例）随笔标题"
+    summary: "一段随笔或读书笔记的开头，读者点进去看全文。"
+    file: "content/writing/ideas/example.md"
+  - date: "2026 · 09"
+    title: "（示例）读书笔记"
+    summary: "可以写最近读的书，也可以写某个念头。"
+  - date: "2026 · 08"
+    title: "（示例）Essay title"
+    summary: "Short essays can be in Chinese, English, or both."

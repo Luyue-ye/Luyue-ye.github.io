@@ -1,0 +1,27 @@
+# ─────────────────────────────────────────────
+# 🌙 Creations · 创作
+# 和 Ideas 一样，只是分了组：
+#   label:   卡片上方的小字（体裁、获奖信息等）
+#   title:   作品名
+#   summary: 简介或开头一两句
+#   file:    全文所在的文件（放在 content/writing/creations/ 里）
+# ─────────────────────────────────────────────
+intro: ""
+groups:
+  - title: "Fiction"
+    zh: "小说"
+    items:
+      - label: "短篇小说 · 获奖作品（示例）"
+        title: "《篇名》"
+        summary: "获奖信息与一段节选，读者可以点开读全文。"
+        file: "content/writing/creations/example.md"
+      - label: "短篇小说（示例）"
+        title: "《篇名》"
+        summary: "作品简介或开头几段。"
+
+  - title: "Other works"
+    zh: "其他创作"
+    items:
+      - label: "诗 / 散文 / 其他（示例）"
+        title: "作品名"
+        summary: "任何你想展示的创作。"
