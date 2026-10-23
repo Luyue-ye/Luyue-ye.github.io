@@ -1,47 +1,44 @@
 # ─────────────────────────────────────────────
-# 🌙 Creations · 创作
-# 三本书并排放在书架上：小说、散文、未分类
-# 点开一本书 → 目录 → 点目录里的篇名进入正文（正文会按书页自动分页）
+# 🌙 Creations · 创作（处女座）
+# 星座上每一颗亮星是一个分类；点进一颗星，是这个分类的作品列表；点作品名进入正文（自动分页）
+# 处女座一共 13 颗主星，所以最多可以有 13 个分类。没用到的星是暗的
 #
-# 每本书：
-#   id:    书的代号（英文，用在网址里，不要改）
-#   title: 封面上的英文名
-#   zh:    封面上的中文名
-#   items: 这本书里的作品，按这里的先后顺序排进目录
+# 每个分类：
+#   id:    分类代号（英文，用在网址里）
+#   title: 星星上显示的英文名
+#   star:  放在哪颗星上（可选）。可以写：Spica, Porrima, Vindemiatrix, Minelauva, Heze, Zavijava,
+#          Zaniah, Rijl al Awwa, Nu Virginis, Omicron Virginis, Syrma, Tau Virginis, Theta Virginis
+#          不写的话，会自动放到还空着的最亮的星上
+#   items: 这个分类里的作品
 #
 # 每篇作品：
-#   label:   标题页上方的小字（获奖信息、写作时间等）
-#   title:   篇名
-#   summary: 标题页上的简介或一两句开头
+#   title:   篇名（列表里显示的名字）
+#   label:   正文页上方的小字（可选，比如获奖信息、写作时间）
 #   file:    全文所在的文件（放在 content/writing/creations/ 里的 .md 文件）
-#            不写 file 就只有标题页
+#   summary: 没有 file 时，正文页显示这段简介（可选）
 # ─────────────────────────────────────────────
 intro: ""
-books:
+categories:
   - id: "fiction"
     title: "Fiction"
-    zh: "小说"
+    star: "Spica"
     items:
-      - label: "短篇小说 · 获奖作品（示例）"
-        title: "《篇名》"
-        summary: "获奖信息与一段节选。"
+      - title: "《篇名》"
+        label: "短篇小说 · 获奖作品（示例）"
         file: "content/writing/creations/example.md"
-      - label: "短篇小说（示例）"
-        title: "《篇名二》"
+      - title: "《篇名二》（示例）"
         summary: "作品简介或开头几段。"
 
   - id: "essays"
     title: "Essays"
-    zh: "散文"
+    star: "Vindemiatrix"
     items:
-      - label: "散文（示例）"
-        title: "《散文篇名》"
+      - title: "《散文篇名》（示例）"
         summary: "一段散文的开头。"
 
   - id: "misc"
     title: "Uncategorized"
-    zh: "未分类"
+    star: "Porrima"
     items:
-      - label: "诗 / 片段 / 其他（示例）"
-        title: "作品名"
+      - title: "《作品名》（示例）"
         summary: "任何你想展示的创作。"

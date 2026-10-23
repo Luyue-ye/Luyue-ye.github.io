@@ -56,36 +56,63 @@ const cardHTML = (it, key) => `<article class="card${it.file ? ' link' : ''}"${i
   <div class="k">${md(it.label || it.date || '')}</div><h3>${md(it.title || '')}</h3>${it.summary ? `<p>${md(it.summary)}</p>` : ''}${it.file ? '<span class="more">阅读 · Read →</span>' : ''}</article>`;
 /* Ideas：塔罗牌。背面只显示日期，点一下翻开 */
 const roman = n => { const v = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]; let s = ''; for (const [a, r] of v) while (n >= a) { s += r; n -= a; } return s || '0'; };
-const TAROT_BACK = `<svg class="tb-art" viewBox="0 0 100 170" aria-hidden="true"><rect x="5" y="5" width="90" height="160" rx="5" fill="none" stroke="currentColor" stroke-width=".6"/><rect x="9" y="9" width="82" height="152" rx="3" fill="none" stroke="currentColor" stroke-width=".3" stroke-dasharray="1 2"/>
-  <g transform="translate(50 72)"><circle r="27" fill="none" stroke="currentColor" stroke-width=".35"/><circle r="31" fill="none" stroke="currentColor" stroke-width=".25" stroke-dasharray=".6 2.2"/>
-  ${Array.from({length: 24}, (_, i) => { const a = i * Math.PI / 12, r1 = 34, r2 = i % 2 ? 38 : 43; return `<line x1="${(r1 * Math.cos(a)).toFixed(1)}" y1="${(r1 * Math.sin(a)).toFixed(1)}" x2="${(r2 * Math.cos(a)).toFixed(1)}" y2="${(r2 * Math.sin(a)).toFixed(1)}" stroke="currentColor" stroke-width=".35"/>`; }).join('')}
-  <path d="M6 -18 A19 19 0 1 0 6 18 A15 15 0 1 1 6 -18Z" fill="currentColor" opacity=".9"/></g>
-  ${[[22,22],[78,22],[22,148],[78,148],[50,16],[50,154]].map(([x, y]) => `<path d="M${x} ${y - 3}Q${x} ${y} ${x + 3} ${y}Q${x} ${y} ${x} ${y + 3}Q${x} ${y} ${x - 3} ${y}Q${x} ${y} ${x} ${y - 3}Z" fill="currentColor"/>`).join('')}</svg>`;
+const TAROT_EDGE = `<path class="t-edge" d="M101 9 L105 13 L105 169 Q105 175 99 175 L13 175 L9 171"/>`;
+const TAROT_BACK = `<svg class="tb-art" viewBox="0 0 106 176" aria-hidden="true">${TAROT_EDGE}
+  <rect class="t-card" x="1" y="1" width="100" height="170" rx="6"/><rect class="t-in" x="7" y="7" width="88" height="158" rx="3"/>
+  <g transform="translate(51 72)"><circle class="t-g" r="24"/><circle class="t-g dash" r="28"/>
+  ${Array.from({ length: 24 }, (_, i) => { const a = i * Math.PI / 12, r2 = i % 2 ? 35 : 39; return `<line class="t-g" x1="${(31 * Math.cos(a)).toFixed(1)}" y1="${(31 * Math.sin(a)).toFixed(1)}" x2="${(r2 * Math.cos(a)).toFixed(1)}" y2="${(r2 * Math.sin(a)).toFixed(1)}"/>`; }).join('')}
+  <path class="t-moon" d="M5 -16 A17 17 0 1 0 5 16 A13.5 13.5 0 1 1 5 -16Z"/></g>
+  ${[[18, 18], [84, 18], [18, 154], [84, 154], [51, 14], [51, 158]].map(([x, y]) => `<path class="t-st" d="M${x} ${y - 3}Q${x} ${y} ${x + 3} ${y}Q${x} ${y} ${x} ${y + 3}Q${x} ${y} ${x - 3} ${y}Q${x} ${y} ${x} ${y - 3}Z"/>`).join('')}</svg>`;
+const TAROT_FRONT = `<svg class="tb-art" viewBox="0 0 106 176" aria-hidden="true">${TAROT_EDGE}<rect class="t-card" x="1" y="1" width="100" height="170" rx="6"/><rect class="t-in solid" x="5" y="5" width="92" height="162" rx="4"/></svg>`;
 function ideasPage() {
   const d = C.ideas || {}, items = arr(d.items), n = items.length;
   return head(0) + errBox('ideas') + intro(d) + `<p class="tarot-hint">点一张牌，翻开它 · Tap a card to turn it over</p><div class="tarot-grid">${items.map((it, i) => `
     <div class="tarot" role="button" tabindex="0" aria-label="${esc(it.date || '')}，翻开 Turn over">
       <div class="in">
         <div class="face back-face">${TAROT_BACK}<div class="tb-date">${md(it.date || '—')}</div></div>
-        <div class="face front-face"><div class="tf-num">${roman(n - i)}</div><h3>${md(it.title || '')}</h3>${it.summary ? `<p>${md(it.summary)}</p>` : ''}
+        <div class="face front-face">${TAROT_FRONT}<div class="tf-num">${roman(n - i)}</div><h3>${md(it.title || '')}</h3>${it.summary ? `<p>${md(it.summary)}</p>` : ''}
           ${it.file ? `<button class="tf-read" data-read="ideas" data-slug="${esc(slugOf(it.file))}">阅读全文 · Read →</button>` : ''}<div class="tf-date">${md(it.date || '')}</div></div>
       </div></div>`).join('')}</div>`;
 }
 function findWriting(key, slug) { return arr((C.ideas || {}).items).find(it => slugOf(it.file) === slug); }
+const readerShell = meta => `<article class="article"><div class="a-meta">${md(meta)}</div><div class="body" id="abody"><p class="soon">…</p></div></article><div class="pager" id="rpager"></div>`;
 function readerPage() {
-  const { key, slug } = reading, it = findWriting(key, slug), i = SEC.moon.indexOf(key);
-  if (!it) return `<button class="back" data-sec="${i}">← ${NAV.moon[i]}</button><p class="soon">找不到这篇文章 · Not found</p>`;
-  return `<button class="back" data-sec="${i}">← ${NAV.moon[i]}</button><article class="article">
-    <div class="a-meta">${md(it.label || it.date || '')}</div><div class="body" id="abody"><p class="soon">…</p></div></article>`;
+  const it = findWriting(reading.key, reading.slug), i = SEC.moon.indexOf(reading.key);
+  return `<button class="back" data-sec="${i}">← ${NAV.moon[i]}</button>` + (it ? readerShell(it.date || it.label || '') : '<p class="soon">找不到这篇文章 · Not found</p>');
 }
-async function fillReader() {
-  const it = findWriting(reading.key, reading.slug), box = $('#abody');
-  if (!it || !box) return;
-  try {
-    const r = await fetch(it.file, { cache: 'no-cache' }); if (!r.ok) throw new Error(r.status);
-    let text = await r.text(); if (!/^\s*#\s/.test(text)) text = `# ${it.title || ''}\n\n` + text;
-    if ($('#abody') === box) box.innerHTML = marked.parse(text);
-  } catch (e) { box.innerHTML = `<p class="err-box">读取文章失败：<code>${esc(it.file)}</code></p>`; }
+function pageNums(cur, n) {
+  const set = [...new Set([0, n - 1, cur - 2, cur - 1, cur, cur + 1, cur + 2].filter(x => x >= 0 && x < n))].sort((a, b) => a - b);
+  let out = '', prev = -1;
+  set.forEach(x => { if (x - prev > 1) out += '<span class="pg-gap">…</span>'; out += `<button data-pg="${x}"${x === cur ? ' aria-current="true"' : ''}>${x + 1}</button>`; prev = x; });
+  return out;
+}
+/* 正文按页显示：长文章自动分成几页，底部有页码 */
+async function fillPaged(it, ref) {
+  const box = $('#abody'); if (!box) return;
+  let html;
+  if (it.file) {
+    try { const r = await fetch(it.file, { cache: 'no-cache' }); if (!r.ok) throw 0; let t = await r.text(); if (!/^\s*#\s/.test(t)) t = `# ${it.title || ''}\n\n` + t; html = marked.parse(t); }
+    catch (_) { html = `<p class="err-box">读取文章失败：<code>${esc(it.file)}</code></p>`; }
+  } else html = `<h1>${md(it.title || '')}</h1>${it.summary ? `<p>${md(it.summary)}</p>` : ''}`;
+  try { await document.fonts.ready; } catch (_) {}
+  if ($('#abody') !== box) return;
+  box.innerHTML = html;
+  const PH = Math.max(620, Math.min(1100, innerHeight * 1.1)), pages = []; let cur = [], start = null;
+  [...box.children].forEach(k => { const top = k.offsetTop, bot = top + k.offsetHeight; if (start === null) start = top; if (cur.length && bot - start > PH) { pages.push(cur); cur = []; start = top; } cur.push(k.outerHTML); });
+  if (cur.length) pages.push(cur);
+  const pg = $('#rpager');
+  const show = (p, dir) => {
+    p = Math.max(0, Math.min(pages.length - 1, p)); ref.page = p;
+    box.innerHTML = pages[p].join(''); box.classList.remove('turn'); void box.offsetWidth; if (dir) box.classList.add('turn');
+    if (pages.length > 1) {
+      pg.innerHTML = `<button data-prev aria-label="Previous page"${p <= 0 ? ' disabled' : ''}>‹</button><span class="pg-nums">${pageNums(p, pages.length)}</span><button data-next aria-label="Next page"${p >= pages.length - 1 ? ' disabled' : ''}>›</button>`;
+      pg.querySelector('[data-prev]').onclick = () => show(p - 1, -1); pg.querySelector('[data-next]').onclick = () => show(p + 1, 1);
+      pg.querySelectorAll('[data-pg]').forEach(b => (b.onclick = () => { const t = +b.dataset.pg; if (t !== p) show(t, t > p ? 1 : -1); }));
+    } else pg.innerHTML = '';
+    if (dir) { const a = box.closest('.article'); if (a) window.scrollTo({ top: a.getBoundingClientRect().top + scrollY - 24, behavior: reduce ? 'auto' : 'smooth' }); }
+    replaceHash();
+  };
+  show(ref.page || 0, 0);
 }
 
 /* 足迹：把 footprints.yaml 整理成地区（星座）和地点（星星） */
@@ -145,7 +172,7 @@ function render() {
   m.querySelectorAll('[data-goback]').forEach(b => (b.onclick = goBack));
   m.querySelectorAll('[data-top]').forEach(b => (b.onclick = () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })));
   m.querySelectorAll('[data-read]').forEach(c => {
-    const open = e => { if (e) e.stopPropagation(); reading = { key: c.dataset.read, slug: c.dataset.slug }; book = null; swap(); commit(); };
+    const open = e => { if (e) e.stopPropagation(); reading = { key: c.dataset.read, slug: c.dataset.slug, page: 0 }; book = null; swap(); commit(); };
     c.onclick = open; c.onkeydown = e => { if (e.key === 'Enter') open(e); };
   });
   m.querySelectorAll('.tarot').forEach(t => {
@@ -153,7 +180,7 @@ function render() {
     t.onclick = flip; t.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === t) { e.preventDefault(); flip(); } };
   });
   document.querySelectorAll('nav .item').forEach((b, i) => { b.textContent = NAV[mode][i]; b.setAttribute('aria-current', String(i === view)); });
-  if (reading) fillReader();
+  if (reading) { const it = findWriting(reading.key, reading.slug); if (it) fillPaged(it, reading); }
   if (mode === 'moon' && view === 1 && !reading) initMap();
   if (mode === 'moon' && view === 3 && !reading) mountWaline();
   if (mode === 'moon' && view === 2 && !reading) mountBook();
@@ -161,7 +188,7 @@ function render() {
 
 /* 网址与“返回上一页”：每次跳转都记进浏览器历史，所以浏览器的后退键也能用 */
 function stateHash() {
-  if (reading) return `${reading.key}/${reading.slug}`;
+  if (reading) return `${reading.key}/${reading.slug}` + (reading.page ? `/${reading.page + 1}` : '');
   if (view < 0) return mode === 'moon' ? 'moon' : '';
   const s = SEC[mode][view];
   if (s === 'creations' && book) return `creations/${book.id}` + (book.slug ? `/${book.slug}` + (book.page ? `/${book.page + 1}` : '') : '');
@@ -177,7 +204,7 @@ function parseHash(t) {
   else if (SEC.sun.includes(sec)) s.view = SEC.sun.indexOf(sec);
   else if (SEC.moon.includes(sec)) {
     s.mode = 'moon'; s.view = SEC.moon.indexOf(sec);
-    if (sec === 'ideas' && a) s.reading = { key: 'ideas', slug: a };
+    if (sec === 'ideas' && a) s.reading = { key: 'ideas', slug: a, page: b ? Math.max(0, (+b || 1) - 1) : 0 };
     if (sec === 'creations' && a) s.book = { id: a, slug: b || null, page: c ? Math.max(0, (+c || 1) - 1) : 0 };
   }
   return s;
