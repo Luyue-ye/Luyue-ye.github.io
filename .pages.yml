@@ -1,8 +1,14 @@
 # Pages CMS 后台设置（https://app.pagescms.org）
 # 这个文件决定后台里能编辑哪些内容、每一项是什么。一般不需要改动。
 media:
-  input: uploads
-  output: uploads
+  - name: images
+    label: 照片 Images
+    input: images
+    output: images
+  - name: writing
+    label: 文章 Writing
+    input: content/writing
+    output: content/writing
 
 content:
   - name: home
@@ -14,9 +20,13 @@ content:
       - name: photo_sun
         label: 太阳面照片
         type: image
+        options:
+          media: images
       - name: photo_moon
         label: 月亮面照片
         type: image
+        options:
+          media: images
       - name: sun
         label: 太阳面首页
         type: object
@@ -30,7 +40,7 @@ content:
             list: true
             fields:
               - { name: label, label: 显示的文字, type: string }
-              - { name: url, label: 网址（CV 上传后填 uploads/文件名.pdf；邮箱直接填地址即可）, type: string }
+              - { name: url, label: 网址（CV 上传到 images 后填 images/文件名.pdf；邮箱直接填地址即可）, type: string }
       - name: moon
         label: 月亮面首页
         type: object
@@ -118,6 +128,7 @@ content:
             label: 或者上传一个文档（Word .docx / .md / .txt），有正文时可不传
             type: file
             options:
+              media: writing
               extensions: [docx, md, txt]
 
   - name: creations
@@ -151,6 +162,7 @@ content:
                 label: 或者上传一个文档（Word .docx / .md / .txt）
                 type: file
                 options:
+                  media: writing
                   extensions: [docx, md, txt]
 
   - name: footprints
@@ -178,5 +190,5 @@ content:
           - { name: coords, label: 坐标 “纬度, 经度”（Google 地图右键第一行）, type: string }
           - { name: note, label: 小标注（例如 家乡），可留空, type: string }
           - { name: home, label: 变成带星芒的大星星, type: boolean }
-          - { name: photo, label: 照片, type: image }
+          - { name: photo, label: 照片, type: image, options: { media: images } }
           - { name: text, label: 一两句话, type: text }
