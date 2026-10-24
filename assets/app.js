@@ -181,19 +181,22 @@ function startFlares() {
   const ctx = cv.getContext('2d'); let W = 0, R = 0, beads = [], next = 0;
   const fit = () => { const d = Math.min(2, devicePixelRatio || 1); W = cv.clientWidth; cv.width = W * d; cv.height = W * d; ctx.setTransform(d, 0, 0, d, 0, 0); R = W / 1.6 / 2; };
   fit();
+  /* 一整圈同时涌出：沿着整个圆一起冒出很多小珠子，到最高点后一起落回 */
   const spawn = now => {
-    const a = Math.random() * 6.283, n = 2 + Math.floor(Math.random() * 4), dir = Math.random() < .5 ? -1 : 1;
-    for (let i = 0; i < n; i++) beads.push({ a: a + (Math.random() - .5) * .12, d: R * (.06 + Math.random() * .16), drift: dir * (.03 + Math.random() * .08),
-      s: 1.3 + Math.random() * 2.4, t0: now + i * (120 + Math.random() * 200), dur: 1800 + Math.random() * 1600 });
-  };
-  const frame = now => {
+    const n = 44, off = Math.random() * 6.283;
+    for (let i = 0; i < n; i++) {
+      const a = off + i * 6.283 / n + (Math.random() - .5) * .08, m = 1 + Math.floor(Math.random() * 3), dir = Math.random() < .5 ? -1 : 1;
+      for (let j = 0; j < m; j++) beads.push({ a: a + (Math.random() - .5) * .05, d: R * (.05 + Math.random() * .15) * (1 - j * .25), drift: dir * (.01 + Math.random() * .04),
+        s: 1.1 + Math.random() * 2.2, t0: now + Math.random() * 220 + j * 90, dur: 2300 + Math.random() * 500 });
+    }
+  };  const frame = now => {
     if (cv.clientWidth !== W) fit();
     const c = W / 2, b = .5 + .5 * Math.sin(now / 1300);
     ctx.clearRect(0, 0, W, W);
     const g = ctx.createRadialGradient(c, c, R * .95, c, c, R * 1.42); g.addColorStop(0, `rgba(240,196,107,${.26 + .08 * b})`); g.addColorStop(1, 'rgba(240,196,107,0)');
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c, c, R * 1.42, 0, 6.283); ctx.fill();
     ctx.strokeStyle = 'rgba(214,150,58,.5)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(c, c, R + 2, 0, 6.283); ctx.stroke();
-    if (!reduce && now > next) { spawn(now); next = now + 300 + Math.random() * 600; }
+    if (!reduce && now > next) { spawn(now); next = now + 3600; }
     beads = beads.filter(p => now < p.t0 + p.dur);
     beads.forEach(p => {
       const k = (now - p.t0) / p.dur; if (k < 0) return;
@@ -206,7 +209,7 @@ function startFlares() {
     });
     if (!reduce) flareRaf = requestAnimationFrame(frame);
   };
-  if (reduce) { const t = performance.now(); for (let i = 0; i < 6; i++) beads.push({ a: i * 1.05, d: R * .12, drift: 0, s: 2.2, t0: t - 900, dur: 1800 }); }
+  if (reduce) { const t = performance.now(); for (let i = 0; i < 36; i++) beads.push({ a: i * .1745, d: R * .1, drift: 0, s: 1.8, t0: t - 900, dur: 1800 }); }
   flareRaf = requestAnimationFrame(frame);
 }
 /* 月亮面照片外围：呼吸的月晕 + 绕着转的小星星 */
