@@ -190,12 +190,13 @@ p{margin:0}
 @keyframes pagein{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:none}}
 .pager{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 10px;margin-top:36px;font:italic 16px var(--en);color:var(--muted)}
 .pager:empty{display:none}
-.pager button{background:none;border:0;color:var(--muted);font:italic 17px var(--en);cursor:pointer;min-width:32px;padding:4px 6px;border-radius:99px}
+.pager button{background:none;border:0;color:var(--muted);font:italic 22px var(--en);cursor:pointer;min-width:42px;min-height:42px;padding:4px 8px;border-radius:99px}
+.pager [data-prev],.pager [data-next]{font-size:28px}
 .pager button:hover:not([disabled]){color:var(--ink)}
 .pager button[disabled]{opacity:.35;cursor:default}
 .pager button[aria-current="true"]{color:var(--ink);background:radial-gradient(closest-side,var(--act),transparent)}
-.pg-nums{display:flex;flex-wrap:wrap;align-items:center;gap:2px}
-.pg-gap{padding:0 4px}
+.pg-nums{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.pg-gap{padding:0 4px;font-size:20px}
 /* 每页底部：返回上一页 */
 .backbar{display:flex;justify-content:space-between;gap:16px;margin-top:56px;padding-top:18px;border-top:1px solid var(--line)}
 .backbar button{background:none;border:0;padding:6px 0;cursor:pointer;color:var(--muted);font:italic 17px var(--en)}
