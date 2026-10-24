@@ -198,3 +198,8 @@ places:
     region: 泰国
     coords: 18.78, 98.98
     home: false
+  - name: 普吉岛
+    en: Phuket
+    region: 泰国
+    coords: 7.53, 98.24
+    home: false
