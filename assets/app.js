@@ -41,7 +41,7 @@ function homeSun() {
 function homeMoon() {
   const site = C.site || {}, m = site.moon || {};
   return errBox('site') + (m.title ? `<p class="moon-title">${md(m.title)}</p>` : '') +
-    `<section class="home"><div class="pframe moonp">${photo(site.photo_moon, '生活照<br>Photo')}<span class="veil" aria-hidden="true"></span></div><div class="intro"><div class="poem">
+    `<section class="home"><div class="moonwrap"><div class="pframe moonp">${photo(site.photo_moon, '生活照<br>Photo')}</div></div><div class="intro"><div class="poem">
     <div>${arr(m.zh_lines).map(l => `<p>${md(l)}</p>`).join('')}</div>
     <div class="en">${arr(m.en_lines).map(l => `<p>${md(l)}</p>`).join('')}</div></div></div></section>`;
 }
