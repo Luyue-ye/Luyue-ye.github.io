@@ -1,6 +1,6 @@
 photo_sun: images/me-sun.jpg
-cv: ""
 photo_moon: images/me-moon.jpg
+cv: files/CV-Luyue_Ye.pdf
 sun:
   hello: Hi, I'm Lulu.
   paragraphs:
