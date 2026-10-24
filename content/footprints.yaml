@@ -1,192 +1,187 @@
-# ─────────────────────────────────────────────
-# 🌙 Footprints · 足迹星盘
-#
-# regions：国家，每个国家在星盘上是一个“星座”，也是右边列表的一组
-# places：每个地点是一颗星星
-#   name:   名字（中文）
-#   en:     英文名
-#   region: 属于哪个国家（要和上面 regions 里的 name 一样；写一个新名字会自动变成新的一组）
-#   coords: 坐标，"纬度, 经度"。在 Google 地图上右键点那个地方，第一行就是坐标，直接复制过来
-#   note:   可选，卡片上的小标注，比如 家乡
-#   home:   可选，写 true 会变成带星芒的大星星
-#   photo:  可选，照片，例如 "images/chengdu.jpg"
-#   text:   可选，卡片上的一两句话
-#
-# 同一个国家里，星星按这里的先后顺序连线
-# 加一个新地点：复制一段 "- name: ..." 改成新的信息，放到同一个国家的地点后面
-# ─────────────────────────────────────────────
-intro: "去过的城市是一颗颗星星，按国家连成星座。拖动可以转动星盘，点一颗星，或在右边选一座城市。"
-
+intro: 去过的城市是一颗颗星星，按国家连成星座。拖动可以转动星盘，点一颗星，或在右边选一座城市。
 regions:
-  - name: "中国"
-    en: "China"
-  - name: "韩国"
-    en: "South Korea"
-  - name: "日本"
-    en: "Japan"
-  - name: "挪威"
-    en: "Norway"
-  - name: "丹麦"
-    en: "Denmark"
-  - name: "瑞典"
-    en: "Sweden"
-  - name: "爱沙尼亚"
-    en: "Estonia"
-  - name: "土耳其"
-    en: "Türkiye"
-  - name: "卡塔尔"
-    en: "Qatar"
-  - name: "美国"
-    en: "United States"
-
+  - name: 中国
+    en: China
+  - name: 韩国
+    en: South Korea
+  - name: 日本
+    en: Japan
+  - name: 挪威
+    en: Norway
+  - name: 丹麦
+    en: Denmark
+  - name: 瑞典
+    en: Sweden
+  - name: 爱沙尼亚
+    en: Estonia
+  - name: 土耳其
+    en: Türkiye
+  - name: 卡塔尔
+    en: Qatar
+  - name: 美国
+    en: United States
 places:
-
-  # 中国
-  - name: "顺德"
-    en: "Shunde"
-    region: "中国"
-    coords: "22.81, 113.29"
-  - name: "广州"
-    en: "Guangzhou"
-    region: "中国"
-    coords: "23.13, 113.26"
-  - name: "昆明"
-    en: "Kunming"
-    region: "中国"
-    coords: "24.88, 102.83"
-  - name: "大理"
-    en: "Dali"
-    region: "中国"
-    coords: "25.61, 100.27"
-  - name: "丽江"
-    en: "Lijiang"
-    region: "中国"
-    coords: "26.87, 100.23"
-  - name: "日喀则"
-    en: "Shigatse"
-    region: "中国"
-    coords: "29.27, 88.88"
-  - name: "拉萨"
-    en: "Lhasa"
-    region: "中国"
-    coords: "29.65, 91.13"
-  - name: "成都"
-    en: "Chengdu"
-    region: "中国"
-    coords: "30.67, 104.07"
-    note: "家乡 · Hometown"
+  - name: 顺德
+    en: Shunde
+    region: 中国
+    coords: 22.81, 113.29
+    home: false
+  - name: 广州
+    en: Guangzhou
+    region: 中国
+    coords: 23.13, 113.26
+    home: false
+  - name: 昆明
+    en: Kunming
+    region: 中国
+    coords: 24.88, 102.83
+    home: false
+  - name: 大理
+    en: Dali
+    region: 中国
+    coords: 25.61, 100.27
+    home: false
+  - name: 丽江
+    en: Lijiang
+    region: 中国
+    coords: 26.87, 100.23
+    home: false
+  - name: 日喀则
+    en: Shigatse
+    region: 中国
+    coords: 29.27, 88.88
+    home: false
+  - name: 拉萨
+    en: Lhasa
+    region: 中国
+    coords: 29.65, 91.13
+    home: false
+  - name: 成都
+    en: Chengdu
+    region: 中国
+    coords: 30.67, 104.07
+    note: 家乡 · Hometown
     home: true
-    photo: ""
-    text: "（示例）在这里写几句关于成都的话"
-  - name: "重庆"
-    en: "Chongqing"
-    region: "中国"
-    coords: "29.56, 106.55"
-  - name: "武汉"
-    en: "Wuhan"
-    region: "中国"
-    coords: "30.59, 114.31"
-  - name: "石家庄"
-    en: "Shijiazhuang"
-    region: "中国"
-    coords: "38.04, 114.51"
-  - name: "北京"
-    en: "Beijing"
-    region: "中国"
-    coords: "39.9, 116.4"
-  - name: "承德"
-    en: "Chengde"
-    region: "中国"
-    coords: "40.95, 117.96"
-  - name: "南京"
-    en: "Nanjing"
-    region: "中国"
-    coords: "32.06, 118.8"
-  - name: "苏州"
-    en: "Suzhou"
-    region: "中国"
-    coords: "31.3, 120.62"
-  - name: "上海"
-    en: "Shanghai"
-    region: "中国"
-    coords: "31.23, 121.47"
-
-  # 韩国
-  - name: "仁川"
-    en: "Incheon"
-    region: "韩国"
-    coords: "37.46, 126.71"
-
-  # 日本
-  - name: "神户"
-    en: "Kobe"
-    region: "日本"
-    coords: "34.69, 135.2"
-  - name: "大阪"
-    en: "Osaka"
-    region: "日本"
-    coords: "34.69, 135.5"
-  - name: "奈良"
-    en: "Nara"
-    region: "日本"
-    coords: "34.69, 135.8"
-  - name: "宇治"
-    en: "Uji"
-    region: "日本"
-    coords: "34.88, 135.8"
-  - name: "京都"
-    en: "Kyoto"
-    region: "日本"
-    coords: "35.01, 135.77"
-
-  # 挪威
-  - name: "奥斯陆"
-    en: "Oslo"
-    region: "挪威"
-    coords: "59.91, 10.75"
-
-  # 丹麦
-  - name: "哥本哈根"
-    en: "Copenhagen"
-    region: "丹麦"
-    coords: "55.68, 12.57"
-
-  # 瑞典
-  - name: "隆德"
-    en: "Lund"
-    region: "瑞典"
-    coords: "55.7, 13.19"
-  - name: "斯德哥尔摩"
-    en: "Stockholm"
-    region: "瑞典"
-    coords: "59.33, 18.07"
-
-  # 爱沙尼亚
-  - name: "塔林"
-    en: "Tallinn"
-    region: "爱沙尼亚"
-    coords: "59.44, 24.75"
-
-  # 土耳其
-  - name: "伊斯坦布尔"
-    en: "Istanbul"
-    region: "土耳其"
-    coords: "41.01, 28.98"
-
-  # 卡塔尔
-  - name: "卡塔尔"
-    en: "Qatar"
-    region: "卡塔尔"
-    coords: "25.29, 51.53"
-
-  # 美国
-  - name: "丹佛"
-    en: "Denver"
-    region: "美国"
-    coords: "39.74, -104.99"
-  - name: "亚特兰大"
-    en: "Atlanta"
-    region: "美国"
-    coords: "33.75, -84.39"
-    note: "现在 · Now"
+    text: （示例）在这里写几句关于成都的话
+  - name: 重庆
+    en: Chongqing
+    region: 中国
+    coords: 29.56, 106.55
+    home: false
+  - name: 武汉
+    en: Wuhan
+    region: 中国
+    coords: 30.59, 114.31
+    home: false
+  - name: 石家庄
+    en: Shijiazhuang
+    region: 中国
+    coords: 38.04, 114.51
+    home: false
+  - name: 北京
+    en: Beijing
+    region: 中国
+    coords: 39.9, 116.4
+    home: false
+  - name: 承德
+    en: Chengde
+    region: 中国
+    coords: 40.95, 117.96
+    home: false
+  - name: 南京
+    en: Nanjing
+    region: 中国
+    coords: 32.06, 118.8
+    home: false
+  - name: 苏州
+    en: Suzhou
+    region: 中国
+    coords: 31.3, 120.62
+    home: false
+  - name: 上海
+    en: Shanghai
+    region: 中国
+    coords: 31.23, 121.47
+    home: false
+  - name: 仁川
+    en: Incheon
+    region: 韩国
+    coords: 37.46, 126.71
+    home: false
+  - name: 神户
+    en: Kobe
+    region: 日本
+    coords: 34.69, 135.2
+    home: false
+  - name: 大阪
+    en: Osaka
+    region: 日本
+    coords: 34.69, 135.5
+    home: false
+  - name: 奈良
+    en: Nara
+    region: 日本
+    coords: 34.69, 135.8
+    home: false
+  - name: 宇治
+    en: Uji
+    region: 日本
+    coords: 34.88, 135.8
+    home: false
+  - name: 京都
+    en: Kyoto
+    region: 日本
+    coords: 35.01, 135.77
+    home: false
+  - name: 奥斯陆
+    en: Oslo
+    region: 挪威
+    coords: 59.91, 10.75
+    home: false
+  - name: 哥本哈根
+    en: Copenhagen
+    region: 丹麦
+    coords: 55.68, 12.57
+    home: false
+  - name: 隆德
+    en: Lund
+    region: 瑞典
+    coords: 55.7, 13.19
+    home: false
+  - name: 斯德哥尔摩
+    en: Stockholm
+    region: 瑞典
+    coords: 59.33, 18.07
+    home: false
+  - name: 塔林
+    en: Tallinn
+    region: 爱沙尼亚
+    coords: 59.44, 24.75
+    home: false
+  - name: 伊斯坦布尔
+    en: Istanbul
+    region: 土耳其
+    coords: 41.01, 28.98
+    home: false
+  - name: 卡塔尔
+    en: Qatar
+    region: 卡塔尔
+    coords: 25.29, 51.53
+    home: false
+  - name: 丹佛
+    en: Denver
+    region: 美国
+    coords: 39.74, -104.99
+    home: false
+  - name: 亚特兰大
+    en: Atlanta
+    region: 美国
+    coords: 33.75, -84.39
+    note: 现在 · Now
     home: true
+  - name: 西安
+    en: Xi‘an
+    region: 中国
+    coords: 34.34, 108.94
+    home: false
+    text: 这里有我最爱的博物馆
