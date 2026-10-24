@@ -1,0 +1,182 @@
+# Pages CMS 后台设置（https://app.pagescms.org）
+# 这个文件决定后台里能编辑哪些内容、每一项是什么。一般不需要改动。
+media:
+  input: uploads
+  output: uploads
+
+content:
+  - name: home
+    label: 首页 Home
+    type: file
+    path: content/site.yaml
+    format: yaml
+    fields:
+      - name: photo_sun
+        label: 太阳面照片
+        type: image
+      - name: photo_moon
+        label: 月亮面照片
+        type: image
+      - name: sun
+        label: 太阳面首页
+        type: object
+        fields:
+          - { name: hello, label: 第一行问候, type: string }
+          - { name: paragraphs, label: 英文介绍（每段一项）, type: text, list: true }
+          - { name: zh, label: 中文介绍, type: text }
+          - name: links
+            label: 底部链接（CV、邮箱等）
+            type: object
+            list: true
+            fields:
+              - { name: label, label: 显示的文字, type: string }
+              - { name: url, label: 网址（CV 用 uploads/文件名.pdf，邮箱用 mailto:地址）, type: string }
+      - name: moon
+        label: 月亮面首页
+        type: object
+        fields:
+          - { name: title, label: 标题, type: string }
+          - { name: zh_lines, label: 中文（每行一项）, type: string, list: true }
+          - { name: en_lines, label: 英文（每行一项）, type: string, list: true }
+      - name: echoes
+        label: Echoes 留言板
+        type: object
+        fields:
+          - { name: intro, label: 留言板上方的话, type: text }
+          - { name: placeholder, label: 留言框里的提示文字, type: string }
+          - { name: waline_server, label: 留言服务器地址（不要改）, type: string }
+
+  - name: focus
+    label: ☀️ Focus 研究
+    type: file
+    path: content/focus.yaml
+    format: yaml
+    fields:
+      - { name: intro, label: 栏目开头的一段话（可留空）, type: text }
+      - &groups
+        name: groups
+        label: 分组
+        type: object
+        list: true
+        fields:
+          - { name: title, label: 分组名（英文）, type: string }
+          - { name: zh, label: 分组名（中文，可留空）, type: string }
+          - name: items
+            label: 条目
+            type: object
+            list: true
+            fields:
+              - { name: when, label: 左边的小字（年份、日期、状态）, type: string }
+              - { name: title, label: 标题, type: string }
+              - { name: text, label: 说明, type: text }
+              - { name: link, label: 链接（可留空）, type: string }
+
+  - name: conferences
+    label: ☀️ Conferences 会议
+    type: file
+    path: content/conferences.yaml
+    format: yaml
+    fields:
+      - { name: intro, label: 栏目开头的一段话（可留空）, type: text }
+      - *groups
+
+  - name: publications
+    label: ☀️ Publications 发表
+    type: file
+    path: content/publications.yaml
+    format: yaml
+    fields:
+      - { name: intro, label: 栏目开头的一段话（可留空）, type: text }
+      - *groups
+
+  - name: teaching
+    label: ☀️ Teaching & Service 教学与服务
+    type: file
+    path: content/teaching.yaml
+    format: yaml
+    fields:
+      - { name: intro, label: 栏目开头的一段话（可留空）, type: text }
+      - *groups
+
+  - name: ideas
+    label: 🌙 Ideas 随笔（塔罗牌）
+    type: file
+    path: content/ideas.yaml
+    format: yaml
+    fields:
+      - { name: intro, label: 栏目开头的一段话（可留空）, type: text }
+      - name: items
+        label: 随笔（新写的放在最上面）
+        type: object
+        list: true
+        fields:
+          - { name: date, label: 日期（显示在牌背面，例如 2026 · 10）, type: string }
+          - { name: title, label: 标题, type: string }
+          - { name: summary, label: 牌面上的简介, type: text }
+          - { name: body, label: 正文（直接在这里写）, type: rich-text }
+          - name: file
+            label: 或者上传一个文档（Word .docx / .md / .txt），有正文时可不传
+            type: file
+            options:
+              extensions: [docx, md, txt]
+
+  - name: creations
+    label: 🌙 Creations 创作（处女座）
+    type: file
+    path: content/creations.yaml
+    format: yaml
+    fields:
+      - { name: intro, label: 栏目开头的一段话（可留空）, type: text }
+      - name: categories
+        label: 分类（每个分类是处女座里的一颗星，最多 13 个）
+        type: object
+        list: true
+        fields:
+          - { name: id, label: 分类代号（英文小写，用在网址里，建好后不要改）, type: string }
+          - { name: title, label: 星星上显示的英文名, type: string }
+          - name: star
+            label: 放在哪颗星上（可留空，自动分配）
+            type: string
+            description: "可选：Spica, Porrima, Vindemiatrix, Minelauva, Heze, Zavijava, Zaniah, Rijl al Awwa, Nu Virginis, Omicron Virginis, Syrma, Tau Virginis, Theta Virginis"
+          - name: items
+            label: 作品
+            type: object
+            list: true
+            fields:
+              - { name: title, label: 篇名, type: string }
+              - { name: label, label: 正文上方的小字（获奖信息、写作时间等）, type: string }
+              - { name: summary, label: 简介（可留空）, type: text }
+              - { name: body, label: 正文（直接在这里写）, type: rich-text }
+              - name: file
+                label: 或者上传一个文档（Word .docx / .md / .txt）
+                type: file
+                options:
+                  extensions: [docx, md, txt]
+
+  - name: footprints
+    label: 🌙 Footprints 足迹
+    type: file
+    path: content/footprints.yaml
+    format: yaml
+    fields:
+      - { name: intro, label: 星盘上方的一段话, type: text }
+      - name: regions
+        label: 国家（列表里的分组顺序）
+        type: object
+        list: true
+        fields:
+          - { name: name, label: 中文名, type: string }
+          - { name: en, label: 英文名, type: string }
+      - name: places
+        label: 地点（同一个国家里按顺序连线）
+        type: object
+        list: true
+        fields:
+          - { name: name, label: 名字（中文）, type: string }
+          - { name: en, label: 英文名, type: string }
+          - { name: region, label: 国家（和上面的中文名一致）, type: string }
+          - { name: coords, label: 坐标 “纬度, 经度”（Google 地图右键第一行）, type: string }
+          - { name: note, label: 小标注（例如 家乡），可留空, type: string }
+          - { name: home, label: 变成带星芒的大星星, type: boolean }
+          - { name: photo, label: 照片, type: image }
+          - { name: text, label: 一两句话, type: text }

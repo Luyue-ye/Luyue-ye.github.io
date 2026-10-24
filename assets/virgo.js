@@ -22,7 +22,7 @@ function virgoCats() {
     if (!st) return;
     used.add(st[0]);
     out.push({ id: String(c.id || 'c' + (i + 1)), title: c.title || '', star: st[0],
-      items: arr(c.items).map((it, j) => ({ ...it, slug: it.file ? slugOf(it.file) : String(it.id || 'n' + (j + 1)) })) });
+      items: arr(c.items).map((it, j) => ({ ...it, slug: itemSlug(it, j) })) });
   });
   return out;
 }

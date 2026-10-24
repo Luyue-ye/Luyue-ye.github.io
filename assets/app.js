@@ -52,6 +52,9 @@ function listSection(key, i) {
       ${it.text ? `<div class="meta">${md(it.text)}</div>` : ''}</div></div>`).join('')}</div>`).join('');
 }
 const slugOf = f => String(f || '').split('/').pop().replace(/\.(md|markdown|docx|txt)$/i, '');
+/* 每篇文章的网址代号：有文件用文件名，否则用标题 */
+const itemSlug = (it, i) => String(it.slug || (it.file ? slugOf(it.file) : String(it.title || '').replace(/[*《》「」"'?#/\\\s]+/g, '').slice(0, 40)) || 'n' + (i + 1));
+const hasText = it => !!(it.file || (it.body && String(it.body).trim()));
 const cardHTML = (it, key) => `<article class="card${it.file ? ' link' : ''}"${it.file ? ` tabindex="0" role="link" data-read="${key}" data-slug="${esc(slugOf(it.file))}"` : ''}>
   <div class="k">${md(it.label || it.date || '')}</div><h3>${md(it.title || '')}</h3>${it.summary ? `<p>${md(it.summary)}</p>` : ''}${it.file ? '<span class="more">阅读 · Read →</span>' : ''}</article>`;
 /* Ideas：塔罗牌。背面只显示日期，点一下翻开 */
@@ -71,10 +74,10 @@ function ideasPage() {
       <div class="in">
         <div class="face back-face">${TAROT_BACK}<div class="tb-date">${md(it.date || '—')}</div></div>
         <div class="face front-face">${TAROT_FRONT}<div class="tf-num">${roman(n - i)}</div><h3>${md(it.title || '')}</h3>${it.summary ? `<p>${md(it.summary)}</p>` : ''}
-          ${it.file ? `<button class="tf-read" data-read="ideas" data-slug="${esc(slugOf(it.file))}">阅读全文 · Read →</button>` : ''}<div class="tf-date">${md(it.date || '')}</div></div>
+          ${hasText(it) ? `<button class="tf-read" data-read="ideas" data-slug="${esc(itemSlug(it, i))}">阅读全文 · Read →</button>` : ''}<div class="tf-date">${md(it.date || '')}</div></div>
       </div></div>`).join('')}</div>`;
 }
-function findWriting(key, slug) { return arr((C.ideas || {}).items).find(it => slugOf(it.file) === slug); }
+function findWriting(key, slug) { return arr((C.ideas || {}).items).find((it, i) => itemSlug(it, i) === slug); }
 const readerShell = meta => `<article class="article"><div class="a-meta">${md(meta)}</div><div class="body" id="abody"><p class="soon">…</p></div></article><div class="pager" id="rpager"></div>`;
 function readerPage() {
   const it = findWriting(reading.key, reading.slug), i = SEC.moon.indexOf(reading.key);
@@ -103,10 +106,12 @@ async function fileToHTML(file) {
 async function fillPaged(it, ref) {
   const box = $('#abody'); if (!box) return;
   let html;
-  if (it.file) {
+  if (it.body && String(it.body).trim()) html = marked.parse(String(it.body));
+  else if (it.file) {
     try { html = await fileToHTML(it.file); if (!/^\s*<h1/i.test(html)) html = `<h1>${md(it.title || '')}</h1>` + html; }
     catch (_) { html = `<p class="err-box">读取文章失败，请检查文件名和格式（支持 .md、.docx、.txt）：<code>${esc(it.file)}</code></p>`; }
-  } else html = `<h1>${md(it.title || '')}</h1>${it.summary ? `<p>${md(it.summary)}</p>` : ''}`;
+  } else html = `${it.summary ? `<p>${md(it.summary)}</p>` : ''}`;
+  if (!/^\s*<h1/i.test(html)) html = `<h1>${md(it.title || '')}</h1>` + html;
   try { await document.fonts.ready; } catch (_) {}
   if ($('#abody') !== box) return;
   box.innerHTML = html;
