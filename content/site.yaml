@@ -50,4 +50,4 @@ echoes:
   placeholder: "在这里留下一句话 · Leave an echo"
   # 留言服务器地址：设置好 Waline 之后，把地址填在引号里（例如 "https://xxx.vercel.app"）
   # 留空时，留言板显示“即将开放”
-  waline_server: ""
+  waline_server: "https://lulu-echoes.vercel.app"
