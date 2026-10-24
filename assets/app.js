@@ -41,7 +41,7 @@ function homeSun() {
 function homeMoon() {
   const site = C.site || {}, m = site.moon || {};
   return errBox('site') + (m.title ? `<p class="moon-title">${md(m.title)}</p>` : '') +
-    `<section class="home"><div class="moonwrap"><div class="pframe moonp">${photo(site.photo_moon, '生活照<br>Photo')}</div></div><div class="intro"><div class="poem">
+    `<section class="home"><div class="moonwrap"><svg class="moon-orbit" id="morbit" viewBox="0 0 160 160" aria-hidden="true"></svg><div class="pframe moonp">${photo(site.photo_moon, '生活照<br>Photo')}</div></div><div class="intro"><div class="poem">
     <div>${arr(m.zh_lines).map(l => `<p>${md(l)}</p>`).join('')}</div>
     <div class="en">${arr(m.en_lines).map(l => `<p>${md(l)}</p>`).join('')}</div></div></div></section>`;
 }
@@ -174,7 +174,28 @@ function mountWaline() {
   }).catch(() => { const w = $('#waline'); if (w) w.innerHTML = '<p class="soon">留言板暂时无法加载 · Echoes could not load</p>'; });
 }
 
+/* 月亮面照片外围：呼吸的月晕 + 绕着转的小星星 */
+let orbitRaf = 0;
+function startOrbit() {
+  const svg = $('#morbit'); if (!svg) return;
+  const c = 80, star = (x, y, r, o) => `<path d="M${x.toFixed(2)} ${(y - r).toFixed(2)}Q${x.toFixed(2)} ${y.toFixed(2)} ${(x + r).toFixed(2)} ${y.toFixed(2)}Q${x.toFixed(2)} ${y.toFixed(2)} ${x.toFixed(2)} ${(y + r).toFixed(2)}Q${x.toFixed(2)} ${y.toFixed(2)} ${(x - r).toFixed(2)} ${y.toFixed(2)}Q${x.toFixed(2)} ${y.toFixed(2)} ${x.toFixed(2)} ${(y - r).toFixed(2)}Z" fill="#ECE8DD" opacity="${o.toFixed(2)}"/>`;
+  const orbits = [[58, .3, 0, 2, 2.2], [66, -.2, 1.5, 2, 1.8], [74, .14, 3, 3, 1.6]];
+  const frame = n => {
+    const T = reduce ? 0 : n / 1000, b = .5 + .5 * Math.sin(T * .8);
+    let o = `<circle cx="${c}" cy="${c}" r="64" fill="none" stroke="#ECE8DD" stroke-width="8" opacity="${(.04 + .035 * b).toFixed(3)}"/>`
+      + `<circle cx="${c}" cy="${c}" r="64" fill="none" stroke="#C9CCD8" stroke-width=".5" opacity="${(.3 + .2 * b).toFixed(2)}"/>`
+      + `<circle cx="${c}" cy="${c}" r="68" fill="none" stroke="#D9CFA8" stroke-width=".35" opacity="${(.15 + .12 * b).toFixed(2)}"/>`;
+    orbits.forEach(([r, s, p, k, sz], i) => {
+      o += `<ellipse cx="${c}" cy="${c}" rx="${r}" ry="${(r * .94).toFixed(1)}" fill="none" stroke="#ECE8DD" stroke-width=".3" opacity=".14"${i === 1 ? ' stroke-dasharray="1 4"' : ''}/>`;
+      for (let j = 0; j < k; j++) { const a = p + j * 2.1 + T * s; o += star(c + r * Math.cos(a), c + r * .94 * Math.sin(a), sz, .65 + .3 * Math.sin(T * 1.7 + i + j)); }
+    });
+    svg.innerHTML = o;
+    if (!reduce) orbitRaf = requestAnimationFrame(frame);
+  };
+  orbitRaf = requestAnimationFrame(frame);
+}
 function render() {
+  cancelAnimationFrame(orbitRaf);
   if (window.stopMap) stopMap();
   if (window.stopBook) stopBook();
   if (wl) { try { wl.destroy(); } catch (_) {} wl = null; }
@@ -210,6 +231,7 @@ function render() {
     initMap();
   }
   if (mode === 'moon' && view === 3 && !reading) mountWaline();
+  if (mode === 'moon' && view < 0 && !reading) startOrbit();
   if (mode === 'moon' && view === 2 && !reading) mountBook();
 }
 
