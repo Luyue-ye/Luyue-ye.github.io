@@ -174,42 +174,38 @@ function mountWaline() {
   }).catch(() => { const w = $('#waline'); if (w) w.innerHTML = '<p class="soon">留言板暂时无法加载 · Echoes could not load</p>'; });
 }
 
-/* 太阳面照片外围：一颗颗小珠子像泡沫一样从太阳边缘冒出来，又落回去 */
+/* 太阳面照片外围：细小的泡泡不断从太阳边缘慢慢飘散出来，越飘越淡，像一圈弥漫的光雾 */
 let flareRaf = 0;
 function startFlares() {
   const cv = $('#sflares'); if (!cv) return;
-  const ctx = cv.getContext('2d'); let W = 0, R = 0, beads = [], next = 0;
+  const ctx = cv.getContext('2d'); let W = 0, R = 0, bubbles = [], last = performance.now();
   const fit = () => { const d = Math.min(2, devicePixelRatio || 1); W = cv.clientWidth; cv.width = W * d; cv.height = W * d; ctx.setTransform(d, 0, 0, d, 0, 0); R = W / 1.6 / 2; };
   fit();
-  /* 一整圈同时涌出：沿着整个圆一起冒出很多小珠子，到最高点后一起落回 */
-  const spawn = now => {
-    const n = 44, off = Math.random() * 6.283;
-    for (let i = 0; i < n; i++) {
-      const a = off + i * 6.283 / n + (Math.random() - .5) * .08, m = 1 + Math.floor(Math.random() * 3), dir = Math.random() < .5 ? -1 : 1;
-      for (let j = 0; j < m; j++) beads.push({ a: a + (Math.random() - .5) * .05, d: R * (.05 + Math.random() * .15) * (1 - j * .25), drift: dir * (.01 + Math.random() * .04),
-        s: 1.1 + Math.random() * 2.2, t0: now + Math.random() * 220 + j * 90, dur: 2300 + Math.random() * 500 });
-    }
-  };  const frame = now => {
+  const make = (now, age) => ({ a: Math.random() * 6.283, r0: R * (.98 + Math.random() * .04), v: R * (.035 + Math.random() * .05), w: (Math.random() - .5) * .06,
+    ph: Math.random() * 6.283, s: .8 + Math.random() * 2.2, t0: now - (age || 0), life: 3800 + Math.random() * 3200 });
+  for (let i = 0; i < 110; i++) bubbles.push(make(last, Math.random() * 6000));
+  const frame = now => {
     if (cv.clientWidth !== W) fit();
-    const c = W / 2, b = .5 + .5 * Math.sin(now / 1300);
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    const c = W / 2, b = .5 + .5 * Math.sin(now / 1800);
     ctx.clearRect(0, 0, W, W);
-    const g = ctx.createRadialGradient(c, c, R * .95, c, c, R * 1.42); g.addColorStop(0, `rgba(240,196,107,${.26 + .08 * b})`); g.addColorStop(1, 'rgba(240,196,107,0)');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c, c, R * 1.42, 0, 6.283); ctx.fill();
-    ctx.strokeStyle = 'rgba(214,150,58,.5)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(c, c, R + 2, 0, 6.283); ctx.stroke();
-    if (!reduce && now > next) { spawn(now); next = now + 3600; }
-    beads = beads.filter(p => now < p.t0 + p.dur);
-    beads.forEach(p => {
-      const k = (now - p.t0) / p.dur; if (k < 0) return;
-      const s = Math.sin(Math.PI * k), r = R + 1 + p.d * s, ang = p.a + p.drift * k, x = c + r * Math.cos(ang), y = c + r * Math.sin(ang);
-      const al = Math.min(1, s * 1.6), rad = p.s * (.6 + .4 * s);
-      const gg = ctx.createRadialGradient(x, y, 0, x, y, rad * 3.2); gg.addColorStop(0, `rgba(240,196,107,${(.45 * al).toFixed(3)})`); gg.addColorStop(1, 'rgba(240,196,107,0)');
-      ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(x, y, rad * 3.2, 0, 6.283); ctx.fill();
-      ctx.fillStyle = `rgba(255,236,190,${(.95 * al).toFixed(3)})`; ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.283); ctx.fill();
-      ctx.strokeStyle = `rgba(214,150,58,${(.55 * al).toFixed(3)})`; ctx.lineWidth = .6; ctx.stroke();
+    const g = ctx.createRadialGradient(c, c, R * .95, c, c, R * 1.5); g.addColorStop(0, `rgba(240,196,107,${.24 + .06 * b})`); g.addColorStop(1, 'rgba(240,196,107,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c, c, R * 1.5, 0, 6.283); ctx.fill();
+    ctx.strokeStyle = 'rgba(214,150,58,.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(c, c, R + 2, 0, 6.283); ctx.stroke();
+    if (!reduce) { let n = dt * 26; while (n > 0) { if (Math.random() < n) bubbles.push(make(now)); n -= 1; } }
+    bubbles = bubbles.filter(p => now - p.t0 < p.life);
+    bubbles.forEach(p => {
+      const age = (now - p.t0) / 1000, k = (now - p.t0) / p.life;
+      const r = p.r0 + p.v * age, ang = p.a + p.w * age + Math.sin(age * 1.3 + p.ph) * .012;
+      const x = c + r * Math.cos(ang), y = c + r * Math.sin(ang);
+      const al = Math.min(1, k * 5) * Math.pow(1 - k, 1.4), rad = p.s * (1 + k * .8);
+      ctx.strokeStyle = `rgba(214,150,58,${(.5 * al).toFixed(3)})`; ctx.lineWidth = .6;
+      ctx.fillStyle = `rgba(255,240,205,${(.55 * al).toFixed(3)})`;
+      ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.283); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = `rgba(255,255,255,${(.7 * al).toFixed(3)})`; ctx.beginPath(); ctx.arc(x - rad * .35, y - rad * .35, rad * .3, 0, 6.283); ctx.fill();
     });
     if (!reduce) flareRaf = requestAnimationFrame(frame);
   };
-  if (reduce) { const t = performance.now(); for (let i = 0; i < 36; i++) beads.push({ a: i * .1745, d: R * .1, drift: 0, s: 1.8, t0: t - 900, dur: 1800 }); }
   flareRaf = requestAnimationFrame(frame);
 }
 /* 月亮面照片外围：呼吸的月晕 + 绕着转的小星星 */
