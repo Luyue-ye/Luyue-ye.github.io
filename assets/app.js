@@ -166,7 +166,12 @@ function render() {
   const inner = reading ? readerPage() : view < 0 ? (mode === 'sun' ? homeSun() : homeMoon()) : P[mode][view]();
   const showBar = view >= 0 || reading || depth > 0;
   m.innerHTML = inner + (showBar ? `<div class="backbar"><button data-goback>← 返回上一页 · Back</button><button data-top>↑ 回到顶部 · Top</button></div>` : '');
-  m.querySelectorAll('img[data-ph]').forEach(img => { img.onerror = () => { const d = document.createElement('div'); d.className = 'photo ph'; d.innerHTML = img.dataset.ph; img.replaceWith(d); }; });
+  m.querySelectorAll('img[data-ph]').forEach(img => {
+    /* 照片路径容错：文件夹写成 image/、扩展名大小写不一致时，自动再试几种写法 */
+    const src = img.getAttribute('src'), base = src.replace(/^\.?\/?(images?\/)?/i, ''), stem = base.replace(/\.[^.]+$/, ''), ext = (base.match(/\.[^.]+$/) || [''])[0];
+    const tries = [...new Set([ext, ext.toLowerCase(), ext.toUpperCase(), '.jpg', '.JPG', '.jpeg', '.png', '.PNG'].map(e => 'images/' + stem + e))].filter(u => u !== src);
+    img.onerror = () => { const next = tries.shift(); if (next) { img.src = next; return; } const d = document.createElement('div'); d.className = 'photo ph'; d.innerHTML = img.dataset.ph; img.replaceWith(d); };
+  });
   m.querySelectorAll('[data-home]').forEach(b => (b.onclick = () => go(-1, b)));
   m.querySelectorAll('[data-sec]').forEach(b => (b.onclick = () => go(+b.dataset.sec, b, true)));
   m.querySelectorAll('[data-goback]').forEach(b => (b.onclick = goBack));
