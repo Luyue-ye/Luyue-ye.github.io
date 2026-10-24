@@ -181,9 +181,9 @@ function startFlares() {
   const ctx = cv.getContext('2d'); let W = 0, R = 0, bubbles = [], last = performance.now();
   const fit = () => { const d = Math.min(2, devicePixelRatio || 1); W = cv.clientWidth; cv.width = W * d; cv.height = W * d; ctx.setTransform(d, 0, 0, d, 0, 0); R = W / 1.6 / 2; };
   fit();
-  const make = (now, age) => ({ a: Math.random() * 6.283, r0: R * (.98 + Math.random() * .04), v: R * (.035 + Math.random() * .05), w: (Math.random() - .5) * .06,
-    ph: Math.random() * 6.283, s: .8 + Math.random() * 2.2, t0: now - (age || 0), life: 3800 + Math.random() * 3200 });
-  for (let i = 0; i < 110; i++) bubbles.push(make(last, Math.random() * 6000));
+  const make = (now, age) => ({ a: Math.random() * 6.283, r0: R * (.98 + Math.random() * .04), v: R * (.012 + Math.random() * .016), w: (Math.random() - .5) * .02,
+    ph: Math.random() * 6.283, s: .8 + Math.random() * 2.2, t0: now - (age || 0), life: 7500 + Math.random() * 5000 });
+  for (let i = 0; i < 140; i++) bubbles.push(make(last, Math.random() * 11000));
   const frame = now => {
     if (cv.clientWidth !== W) fit();
     const dt = Math.min(.05, (now - last) / 1000); last = now;
@@ -192,13 +192,13 @@ function startFlares() {
     const g = ctx.createRadialGradient(c, c, R * .95, c, c, R * 1.5); g.addColorStop(0, `rgba(240,196,107,${.24 + .06 * b})`); g.addColorStop(1, 'rgba(240,196,107,0)');
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c, c, R * 1.5, 0, 6.283); ctx.fill();
     ctx.strokeStyle = 'rgba(214,150,58,.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(c, c, R + 2, 0, 6.283); ctx.stroke();
-    if (!reduce) { let n = dt * 26; while (n > 0) { if (Math.random() < n) bubbles.push(make(now)); n -= 1; } }
+    if (!reduce) { let n = dt * 14; while (n > 0) { if (Math.random() < n) bubbles.push(make(now)); n -= 1; } }
     bubbles = bubbles.filter(p => now - p.t0 < p.life);
     bubbles.forEach(p => {
       const age = (now - p.t0) / 1000, k = (now - p.t0) / p.life;
-      const r = p.r0 + p.v * age, ang = p.a + p.w * age + Math.sin(age * 1.3 + p.ph) * .012;
+      const r = p.r0 + p.v * age, ang = p.a + p.w * age + Math.sin(age * .55 + p.ph) * .015;
       const x = c + r * Math.cos(ang), y = c + r * Math.sin(ang);
-      const al = Math.min(1, k * 5) * Math.pow(1 - k, 1.4), rad = p.s * (1 + k * .8);
+      const al = Math.min(1, k * 5) * Math.pow(1 - k, 1.4), rad = p.s * (1 + k * .6);
       ctx.strokeStyle = `rgba(214,150,58,${(.5 * al).toFixed(3)})`; ctx.lineWidth = .6;
       ctx.fillStyle = `rgba(255,240,205,${(.55 * al).toFixed(3)})`;
       ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.283); ctx.fill(); ctx.stroke();
