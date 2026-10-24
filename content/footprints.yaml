@@ -186,3 +186,8 @@ places:
     coords: 34.34, 108.94
     home: false
     text: 这里有我最爱的博物馆
+  - name: 曼谷
+    en: Bangkok
+    region: 泰国
+    coords: 13.45, 100.31
+    home: false
