@@ -1,53 +1,38 @@
-# ─────────────────────────────────────────────
-# 首页内容（太阳面和月亮面的首页）
-# 小提示：
-#   · 每一行开头的空格（缩进）不能乱改，只改引号里面的文字
-#   · 文字里用 *斜体* 会显示成斜体，[文字](网址) 会变成链接
-#   · # 开头的行是说明，不会显示在网站上
-# ─────────────────────────────────────────────
-
-# 首页照片：把照片上传到 images 文件夹，然后在引号里写文件名
-# 例如 "images/lulu-sun.jpg"。留空 "" 会显示一个占位框
-photo_sun: "images/me-sun.jpg"
-photo_moon: "images/me-moon.jpg"
-
-# ☀️ 太阳面首页
+photo_sun: images/me-sun.jpg
+photo_moon: images/me-moon.jpg
 sun:
-  hello: "Hi, I'm Lulu."
+  hello: Hi, I'm Lulu.
   paragraphs:
-    - "I am a PhD student in Communication at Georgia State University. Welcome to my website."
-    - "My research focuses on diaspora media and cyberpolitics, especially how exiled critics from China use digital platforms to reach audiences abroad and how their work shapes a transnational public sphere. I am also beginning to explore Chinese feminist media and China's green soft power in the Nordic countries."
-    - "This site has two sides. The sun side, where you are now, collects my research, conference presentations, publications, and teaching and service at GSU. Click *Lulu* at the center of the menu to switch to the moon side."
-  zh: "我是佐治亚州立大学传播学博士生。这个网站有日、月两面：太阳记录学术与工作，点击中间的 Lulu，去看看月亮那一面。"
-  # 首页下方的一行链接。url 留空就只显示文字
-  # CV：把 PDF 上传到 files 文件夹，url 写 "files/文件名.pdf"
-  # 邮箱：url 写 "mailto:你的邮箱"
+    - I am a PhD student in Communication at Georgia State University. Welcome
+      to my website.
+    - My research focuses on diaspora media and cyberpolitics, especially how
+      exiled critics from China use digital platforms to reach audiences abroad
+      and how their work shapes a transnational public sphere. I am also
+      beginning to explore Chinese feminist media and China's green soft power
+      in the Nordic countries.
+    - This site has two sides. The sun side, where you are now, collects my
+      research, conference presentations, publications, and teaching and service
+      at GSU. Click *Lulu* at the center of the menu to switch to the moon side.
+  zh: 我是佐治亚州立大学传播学博士生。这个网站有日、月两面：太阳记录学术与工作，点击中间的 Lulu，去看看月亮那一面。
   links:
-    - label: "CV (PDF)"
-      url: ""
-    - label: "Email"
-      url: ""
-    - label: "Google Scholar"
-      url: ""
-
-# 🌙 月亮面首页
+    - label: CV (PDF)
+    - label: Email
+      url: lye5@student.gsu.edu
+    - label: Google Scholar
 moon:
-  title: "Welcome to my other side"
+  title: Welcome to my other side
   zh_lines:
-    - "处女座，INFJ"
-    - "父母取“美玉”与“璎珞”之意，为我起了中文名字"
-    - "我的梦想，是成为故事的创造者"
-    - "将来，想和心爱的人住在海边，养一只狗，一只猫"
+    - 处女座，INFJ
+    - 父母取“美玉”与“璎珞”之意，为我起了中文名字
+    - 我的梦想，是成为故事的创造者
+    - 将来，想和心爱的人住在海边，养一只狗，一只猫
   en_lines:
-    - "Virgo, INFJ."
-    - "My parents drew my Chinese name from fine jade and a jeweled necklace."
-    - "My dream is to become a creator of stories."
-    - "Someday I'd like to live by the sea with the one I love, with a dog and a cat."
-
-# 🌙 Echoes 留言板
+    - Virgo, INFJ.
+    - My parents drew my Chinese name from fine jade and a jeweled necklace.
+    - My dream is to become a creator of stories.
+    - Someday I'd like to live by the sea with the one I love, with a dog and a
+      cat.
 echoes:
-  intro: "Leave a few words here. 给我留几句话吧。"
-  placeholder: "在这里留下一句话 · Leave an echo"
-  # 留言服务器地址：设置好 Waline 之后，把地址填在引号里（例如 "https://xxx.vercel.app"）
-  # 留空时，留言板显示“即将开放”
-  waline_server: "https://lulu-echoes.vercel.app"
+  intro: Leave a few words here. 给我留几句话吧。
+  placeholder: 在这里留下一句话 · Leave an echo
+  waline_server: https://lulu-echoes.vercel.app
