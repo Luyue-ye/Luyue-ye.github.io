@@ -68,6 +68,7 @@ places:
     region: 中国
     coords: 29.56, 106.55
     home: false
+    photo: uploads/IMG_2986.jpeg
   - name: 武汉
     en: Wuhan
     region: 中国
