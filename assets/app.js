@@ -30,7 +30,8 @@ const photo = (src, ph) => (src ? `<img class="photo" src="${esc(src)}" alt="Lul
 
 function homeSun() {
   const site = C.site || {}, s = site.sun || {};
-  const links = arr(s.links).map(l => (l.url ? `<a href="${esc(l.url)}"${linkAttrs(l.url)}>${esc(l.label)}</a>` : `<span>${esc(l.label)}</span>`)).join('');
+  const fixUrl = u => { u = String(u || '').trim(); return /^[^\s@:/]+@[^\s@/]+\.[^\s@/]+$/.test(u) ? 'mailto:' + u : u; }; /* 只写了邮箱地址时，自动变成发邮件的链接 */
+  const links = arr(s.links).map(l => { const u = fixUrl(l.url); return u ? `<a href="${esc(u)}"${linkAttrs(u)}>${esc(l.label)}</a>` : `<span>${esc(l.label)}</span>`; }).join('');
   return errBox('site') + `<section class="home">${photo(site.photo_sun, '照片<br>Photo')}<div class="intro">
     ${s.hello ? `<p class="hi">${md(s.hello)}</p>` : ''}
     ${arr(s.paragraphs).map(p => `<p>${md(p)}</p>`).join('')}

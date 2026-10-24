@@ -30,7 +30,7 @@ content:
             list: true
             fields:
               - { name: label, label: 显示的文字, type: string }
-              - { name: url, label: 网址（CV 用 uploads/文件名.pdf，邮箱用 mailto:地址）, type: string }
+              - { name: url, label: 网址（CV 上传后填 uploads/文件名.pdf；邮箱直接填地址即可）, type: string }
       - name: moon
         label: 月亮面首页
         type: object
