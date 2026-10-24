@@ -201,3 +201,16 @@ p{margin:0}
 .backbar{display:flex;justify-content:space-between;gap:16px;margin-top:56px;padding-top:18px;border-top:1px solid var(--line)}
 .backbar button{background:none;border:0;padding:6px 0;cursor:pointer;color:var(--muted);font:italic 17px var(--en)}
 .backbar button:hover{color:var(--ink)}
+/* 自定义鼠标（光点与光环） */
+:root{--cc:#B8862E}
+:root.moon{--cc:#ECE8DD}
+html.cc,html.cc *{cursor:none!important}
+html.cc input,html.cc textarea,html.cc select,html.cc [contenteditable="true"]{cursor:text!important}
+.cc-dot,.cc-ring{position:fixed;left:0;top:0;pointer-events:none;z-index:9999;opacity:0;border-radius:50%}
+.cc-dot{width:7px;height:7px;margin:-3.5px 0 0 -3.5px;background:var(--cc);transition:opacity .3s,background-color 1.4s}
+.cc-ring{width:30px;height:30px;margin:-15px 0 0 -15px;border:1px solid var(--cc);transition:opacity .3s,width .25s,height .25s,margin .25s,border-color 1.4s,box-shadow .25s}
+html.cc-on .cc-dot{opacity:1}
+html.cc-on .cc-ring{opacity:.55}
+html.cc-on .cc-ring.hot{width:52px;height:52px;margin:-26px 0 0 -26px;opacity:.95;box-shadow:0 0 14px var(--cc)}
+html.cc-on .cc-ring.press{width:22px;height:22px;margin:-11px 0 0 -11px}
+html.cc-text .cc-dot,html.cc-text .cc-ring{opacity:0!important}
