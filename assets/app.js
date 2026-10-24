@@ -184,9 +184,9 @@ function startOrbit() {
     const T = reduce ? 0 : n / 1000, b = .5 + .5 * Math.sin(T * .8);
     let o = `<circle cx="${c}" cy="${c}" r="64" fill="none" stroke="#ECE8DD" stroke-width="8" opacity="${(.04 + .035 * b).toFixed(3)}"/>`
       + `<circle cx="${c}" cy="${c}" r="64" fill="none" stroke="#C9CCD8" stroke-width=".5" opacity="${(.3 + .2 * b).toFixed(2)}"/>`
-      + `<circle cx="${c}" cy="${c}" r="68" fill="none" stroke="#D9CFA8" stroke-width=".35" opacity="${(.15 + .12 * b).toFixed(2)}"/>`;
+      + `<circle cx="${c}" cy="${c}" r="68" fill="none" stroke="#D9CFA8" stroke-width=".35" opacity="${(.15 + .12 * b).toFixed(2)}"/>`
+      + `<circle cx="${c}" cy="${c}" r="59.5" fill="none" stroke="#ECE8DD" stroke-width=".35" stroke-dasharray="1 5" opacity=".35"/>`;
     orbits.forEach(([r, s, p, k, sz], i) => {
-      o += `<ellipse cx="${c}" cy="${c}" rx="${r}" ry="${(r * .94).toFixed(1)}" fill="none" stroke="#ECE8DD" stroke-width=".3" opacity=".14"${i === 1 ? ' stroke-dasharray="1 4"' : ''}/>`;
       for (let j = 0; j < k; j++) { const a = p + j * 2.1 + T * s; o += star(c + r * Math.cos(a), c + r * .94 * Math.sin(a), sz, .65 + .3 * Math.sin(T * 1.7 + i + j)); }
     });
     svg.innerHTML = o;

@@ -223,6 +223,7 @@ html.cc-text .cc-dot,html.cc-text .cc-ring{opacity:0!important}
 .pframe.sunp{box-shadow:0 0 0 1px rgba(184,134,46,.45),0 0 0 9px rgba(240,196,107,.12),0 0 40px rgba(240,196,107,.25)}
 .pframe.moonp{overflow:hidden;box-shadow:0 0 0 1px rgba(236,232,221,.22),0 0 40px rgba(236,232,221,.12)}
 .moonwrap{position:relative}
+.pframe.moonp .photo{object-position:50% 75%;transform:translate(30%,0) scale(1.6)}
 .moon-orbit{position:absolute;left:-30%;top:-30%;width:160%;height:160%;pointer-events:none;overflow:visible}
 .veil{position:absolute;top:-20%;right:-20%;width:92%;height:92%;border-radius:50%;pointer-events:none;
   background:repeating-linear-gradient(30deg,rgba(236,232,221,.025) 0 1px,transparent 1px 3px),
