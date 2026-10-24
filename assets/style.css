@@ -220,7 +220,9 @@ html.cc-text .cc-dot,html.cc-text .cc-ring{opacity:0!important}
 /* 首页照片：太阳面圆形，月亮面月牙（右上角被一层薄纱遮住） */
 .pframe{position:relative;width:100%;aspect-ratio:1/1;border-radius:50%;justify-self:center}
 .pframe .photo{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:50%;object-fit:cover}
-.pframe.sunp{box-shadow:0 0 0 1px rgba(184,134,46,.45),0 0 0 9px rgba(240,196,107,.12),0 0 40px rgba(240,196,107,.25)}
+.pframe.sunp{box-shadow:0 0 0 1px rgba(184,134,46,.45)}
+.sunwrap{position:relative}
+.sun-flares{position:absolute;left:-30%;top:-30%;width:160%;height:160%;pointer-events:none}
 .pframe.moonp{overflow:hidden;box-shadow:0 0 0 1px rgba(236,232,221,.22),0 0 40px rgba(236,232,221,.12)}
 .moonwrap{position:relative}
 .pframe.moonp .photo{object-position:50% 75%;transform:translate(30%,0) scale(1.6)}

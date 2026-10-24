@@ -32,7 +32,7 @@ function homeSun() {
   const site = C.site || {}, s = site.sun || {};
   const fixUrl = u => { u = String(u || '').trim(); return /^[^\s@:/]+@[^\s@/]+\.[^\s@/]+$/.test(u) ? 'mailto:' + u : u; }; /* 只写了邮箱地址时，自动变成发邮件的链接 */
   const links = arr(s.links).map(l => { const u = fixUrl(l.url) || (/\bcv\b/i.test(l.label || '') && site.cv ? site.cv : ''); return u ? `<a href="${esc(u)}"${linkAttrs(u)}>${esc(l.label)}</a>` : `<span>${esc(l.label)}</span>`; }).join('');
-  return errBox('site') + `<section class="home"><div class="pframe sunp">${photo(site.photo_sun, '照片<br>Photo')}</div><div class="intro">
+  return errBox('site') + `<section class="home"><div class="sunwrap"><canvas class="sun-flares" id="sflares" aria-hidden="true"></canvas><div class="pframe sunp">${photo(site.photo_sun, '照片<br>Photo')}</div></div><div class="intro">
     ${s.hello ? `<p class="hi">${md(s.hello)}</p>` : ''}
     ${arr(s.paragraphs).map(p => `<p>${md(p)}</p>`).join('')}
     ${s.zh ? `<p class="zh-line">${md(s.zh)}</p>` : ''}
@@ -174,6 +174,39 @@ function mountWaline() {
   }).catch(() => { const w = $('#waline'); if (w) w.innerHTML = '<p class="soon">留言板暂时无法加载 · Echoes could not load</p>'; });
 }
 
+/* 太阳面照片外围：小小的日珥耀斑从太阳边缘跃出，又落回太阳 */
+let flareRaf = 0;
+function startFlares() {
+  const cv = $('#sflares'); if (!cv) return;
+  const ctx = cv.getContext('2d'); let W = 0, R = 0, arcs = [], next = 0;
+  const fit = () => { const d = Math.min(2, devicePixelRatio || 1); W = cv.clientWidth; cv.width = W * d; cv.height = W * d; ctx.setTransform(d, 0, 0, d, 0, 0); R = W / 1.6 / 2; };
+  fit();
+  const spawn = now => arcs.push({ a: Math.random() * 6.283, span: .1 + Math.random() * .16, h: R * (.07 + Math.random() * .12), t0: now, dur: 2600 + Math.random() * 2200, lay: 2 + (Math.random() < .5 ? 1 : 0) });
+  const frame = now => {
+    if (cv.clientWidth !== W) fit();
+    const c = W / 2, b = .5 + .5 * Math.sin(now / 1300);
+    ctx.clearRect(0, 0, W, W);
+    const g = ctx.createRadialGradient(c, c, R * .95, c, c, R * 1.45); g.addColorStop(0, `rgba(240,196,107,${.28 + .08 * b})`); g.addColorStop(1, 'rgba(240,196,107,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c, c, R * 1.45, 0, 6.283); ctx.fill();
+    ctx.strokeStyle = 'rgba(214,150,58,.5)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(c, c, R + 3, 0, 6.283); ctx.stroke();
+    if (!reduce && now > next) { spawn(now); next = now + 380 + Math.random() * 700; }
+    arcs = arcs.filter(f => now < f.t0 + f.dur);
+    arcs.forEach(f => {
+      const k = (now - f.t0) / f.dur, s = Math.sin(Math.PI * k), hh = f.h * s, r0 = R + 2;
+      ctx.save(); ctx.translate(c, c); ctx.rotate(f.a);
+      for (let j = 0; j < f.lay; j++) {
+        const sp = f.span * (1 - j * .22), e = hh * (1.35 - j * .15);
+        ctx.beginPath(); ctx.moveTo(r0 * Math.cos(-sp / 2), r0 * Math.sin(-sp / 2));
+        ctx.bezierCurveTo((r0 + e) * Math.cos(-sp / 2), (r0 + e) * Math.sin(-sp / 2), (r0 + e) * Math.cos(sp / 2), (r0 + e) * Math.sin(sp / 2), r0 * Math.cos(sp / 2), r0 * Math.sin(sp / 2));
+        ctx.strokeStyle = `rgba(${j ? '240,196,107' : '224,146,52'},${((.85 - j * .25) * s).toFixed(3)})`; ctx.lineWidth = 2.2 - j * .6; ctx.stroke();
+      }
+      ctx.restore();
+    });
+    if (!reduce) flareRaf = requestAnimationFrame(frame);
+  };
+  if (reduce) for (let i = 0; i < 5; i++) arcs.push({ a: i * 1.25, span: .18, h: R * .14, t0: performance.now() - 1300, dur: 2600, lay: 2 });
+  flareRaf = requestAnimationFrame(frame);
+}
 /* 月亮面照片外围：呼吸的月晕 + 绕着转的小星星 */
 let orbitRaf = 0;
 function startOrbit() {
@@ -195,7 +228,7 @@ function startOrbit() {
   orbitRaf = requestAnimationFrame(frame);
 }
 function render() {
-  cancelAnimationFrame(orbitRaf);
+  cancelAnimationFrame(orbitRaf); cancelAnimationFrame(flareRaf);
   if (window.stopMap) stopMap();
   if (window.stopBook) stopBook();
   if (wl) { try { wl.destroy(); } catch (_) {} wl = null; }
@@ -232,6 +265,7 @@ function render() {
   }
   if (mode === 'moon' && view === 3 && !reading) mountWaline();
   if (mode === 'moon' && view < 0 && !reading) startOrbit();
+  if (mode === 'sun' && view < 0 && !reading) startFlares();
   if (mode === 'moon' && view === 2 && !reading) mountBook();
 }
 
