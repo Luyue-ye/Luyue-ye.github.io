@@ -311,7 +311,7 @@ function switchMode(toMoon, setState) {
   const m = $('#main'), items = document.querySelectorAll('nav .item');
   m.classList.add('fade'); items.forEach(b => (b.style.opacity = 0));
   setTimeout(() => {
-    mode = toMoon ? 'moon' : 'sun'; reading = null; book = null; if (setState) setState();
+    mode = toMoon ? 'moon' : 'sun'; reading = null; book = null; if (setState) setState(); else view = -1; /* 点 Lulu 切换时，总是回到另一面的首页 */
     render(); m.classList.remove('fade'); items.forEach(b => (b.style.opacity = 1)); setDecor(toMoon);
   }, reduce ? 0 : 600);
   toMoon ? eclipse(330, 122, () => (busy = false)) : eclipse(122, -140, () => { $('#sh').setAttribute('cx', 330); busy = false; });
