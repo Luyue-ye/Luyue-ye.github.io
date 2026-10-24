@@ -8,7 +8,7 @@
 
 # 首页照片：把照片上传到 images 文件夹，然后在引号里写文件名
 # 例如 "images/lulu-sun.jpg"。留空 "" 会显示一个占位框
-photo_sun: ""
+photo_sun: "image/Me_Sun.jpg"
 photo_moon: ""
 
 # ☀️ 太阳面首页
