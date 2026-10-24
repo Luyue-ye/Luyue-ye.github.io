@@ -19,7 +19,8 @@ sun:
     - label: CV (PDF)
     - label: Email
       url: lye5@student.gsu.edu
-    - label: Google Scholar
+    - label: LinkedIn
+      url: https://www.linkedin.com/in/luyue-ye-91670a399/
 moon:
   title: Welcome to my other side
   zh_lines:
