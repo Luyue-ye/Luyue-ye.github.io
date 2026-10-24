@@ -205,3 +205,8 @@ places:
     region: 泰国
     coords: 7.53, 98.24
     home: false
+  - name: 伦敦
+    en: London
+    region: 英国
+    coords: 51.30, -00.07
+    home: false
