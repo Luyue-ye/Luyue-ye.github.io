@@ -14,7 +14,7 @@
 # 每篇作品：
 #   title:   篇名（列表里显示的名字）
 #   label:   正文页上方的小字（可选，比如获奖信息、写作时间）
-#   file:    全文所在的文件（放在 content/writing/creations/ 里的 .md 文件）
+#   file:    全文所在的文件（放在 content/writing/creations/ 里）。可以是 Word 文档 .docx、Markdown .md 或纯文本 .txt
 #   summary: 没有 file 时，正文页显示这段简介（可选）
 # ─────────────────────────────────────────────
 intro: ""

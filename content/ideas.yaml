@@ -5,7 +5,7 @@
 #   date:    日期（显示在牌的背面）
 #   title:   标题
 #   summary: 卡片上显示的一两句
-#   file:    全文所在的文件（放在 content/writing/ideas/ 里的 .md 文件）
+#   file:    全文所在的文件（放在 content/writing/ideas/ 里）。可以是 Word 文档 .docx、Markdown .md 或纯文本 .txt
 #            不写 file 就只有卡片，不能点开
 # 新写一篇：在 content/writing/ideas/ 里新建一个 .md 文件写正文，再在这里加一张卡片
 # ─────────────────────────────────────────────

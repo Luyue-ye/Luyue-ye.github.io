@@ -29,7 +29,7 @@
 | `content/ideas.yaml` | 🌙 Ideas 想法（塔罗牌，背面显示日期） |
 | `content/creations.yaml` | 🌙 Creations 创作（处女座星座：每颗亮星是一个分类，最多 13 个） |
 | `content/footprints.yaml` | 🌙 Footprints 足迹星盘的国家和城市 |
-| `content/writing/` | Ideas 和 Creations 的全文（每篇一个 `.md` 文件） |
+| `content/writing/` | Ideas 和 Creations 的全文（每篇一个文件，可以是 Word `.docx`、`.md` 或 `.txt`） |
 
 每个文件开头都有中文说明，写了每一项是什么意思。
 
@@ -59,15 +59,24 @@
 
 ## 五、写随笔、放小说
 
-1. 进入 `content/writing/ideas`（小说放 `content/writing/creations`）
-2. **Add file → Create new file**，文件名用英文，例如 `moon-notes.md`
-3. 第一行写 `# 标题`，下面空一行开始写正文；空一行就是新的一段
-4. 打开 `content/ideas.yaml`，在最上面加一张牌，`file` 写 `"content/writing/ideas/moon-notes.md"`
-5. 小说、散文等：打开 `content/creations.yaml`，在对应分类（fiction 小说 / essays 散文 / misc 未分类）的 `items` 下面加一篇，`file` 写 `"content/writing/creations/文件名.md"`。想加新分类，就复制一个分类改名字，它会自动点亮处女座里的下一颗星
+**最简单：直接上传 Word 文档**
+1. 进入 `content/writing/ideas`（小说、散文放 `content/writing/creations`）
+2. **Add file → Upload files**，把 `.docx` 拖进去，**Commit changes**。文件名最好用英文，例如 `countdown-novel.docx`
+3. 打开 `content/ideas.yaml`（或 `creations.yaml`），加一篇，`file` 写 `"content/writing/creations/countdown-novel.docx"`
+
+网站会自动把 Word 里的段落、标题、加粗、斜体转成网页。如果 Word 第一行是用“标题”样式写的篇名，网页上就用它当标题；否则用你在 yaml 里写的 `title`。
+
+说明：只支持 `.docx`，不支持旧版 `.doc` 和 `.pdf`。Word 里的批注、修订、复杂排版（文本框、分栏）不会显示。
+
+**也可以用 Markdown 或纯文本**：文件名以 `.md` 或 `.txt` 结尾。`.md` 里第一行写 `# 标题`，空一行开始正文；`.txt` 每一行就是一段。
+
+**放进哪里**
+- Ideas：打开 `content/ideas.yaml`，在最上面加一张牌
+- Creations：打开 `content/creations.yaml`，在对应分类（fiction 小说 / essays 散文 / misc 未分类）的 `items` 下面加一篇。想加新分类，就复制一个分类改名字，它会自动点亮处女座里的下一颗星
 
 长文章会自动分成几页，正文底部有页码。
 
-每篇文章都有自己的网址，例如 `https://luyue-ye.github.io/#ideas/moon-notes`、`https://luyue-ye.github.io/#creations/fiction/文件名`，可以直接分享。
+每篇文章都有自己的网址，例如 `https://luyue-ye.github.io/#creations/fiction/countdown-novel`，可以直接分享。
 
 ## 六、在星盘上加一个地方
 

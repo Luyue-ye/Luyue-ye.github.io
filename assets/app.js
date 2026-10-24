@@ -51,7 +51,7 @@ function listSection(key, i) {
       <h3>${it.link ? `<a href="${esc(it.link)}"${linkAttrs(it.link)}>${md(it.title)}</a>` : md(it.title)}</h3>
       ${it.text ? `<div class="meta">${md(it.text)}</div>` : ''}</div></div>`).join('')}</div>`).join('');
 }
-const slugOf = f => String(f || '').split('/').pop().replace(/\.md$/i, '');
+const slugOf = f => String(f || '').split('/').pop().replace(/\.(md|markdown|docx|txt)$/i, '');
 const cardHTML = (it, key) => `<article class="card${it.file ? ' link' : ''}"${it.file ? ` tabindex="0" role="link" data-read="${key}" data-slug="${esc(slugOf(it.file))}"` : ''}>
   <div class="k">${md(it.label || it.date || '')}</div><h3>${md(it.title || '')}</h3>${it.summary ? `<p>${md(it.summary)}</p>` : ''}${it.file ? '<span class="more">阅读 · Read →</span>' : ''}</article>`;
 /* Ideas：塔罗牌。背面只显示日期，点一下翻开 */
@@ -86,13 +86,26 @@ function pageNums(cur, n) {
   set.forEach(x => { if (x - prev > 1) out += '<span class="pg-gap">…</span>'; out += `<button data-pg="${x}"${x === cur ? ' aria-current="true"' : ''}>${x + 1}</button>`; prev = x; });
   return out;
 }
+/* 正文文件：支持 Markdown (.md)、Word (.docx)、纯文本 (.txt) */
+const libs = {};
+const loadScript = src => libs[src] || (libs[src] = new Promise((ok, no) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }));
+async function fileToHTML(file) {
+  const r = await fetch(file, { cache: 'no-cache' }); if (!r.ok) throw new Error(r.status);
+  const f = file.toLowerCase();
+  if (f.endsWith('.docx')) {
+    await loadScript('https://cdn.jsdelivr.net/npm/mammoth@1.11.0/mammoth.browser.min.js');
+    return (await mammoth.convertToHtml({ arrayBuffer: await r.arrayBuffer() })).value;
+  }
+  if (f.endsWith('.txt')) return (await r.text()).split(/\r?\n/).map(s => s.trim()).filter(Boolean).map(s => `<p>${esc(s)}</p>`).join('');
+  return marked.parse(await r.text());
+}
 /* 正文按页显示：长文章自动分成几页，底部有页码 */
 async function fillPaged(it, ref) {
   const box = $('#abody'); if (!box) return;
   let html;
   if (it.file) {
-    try { const r = await fetch(it.file, { cache: 'no-cache' }); if (!r.ok) throw 0; let t = await r.text(); if (!/^\s*#\s/.test(t)) t = `# ${it.title || ''}\n\n` + t; html = marked.parse(t); }
-    catch (_) { html = `<p class="err-box">读取文章失败：<code>${esc(it.file)}</code></p>`; }
+    try { html = await fileToHTML(it.file); if (!/^\s*<h1/i.test(html)) html = `<h1>${md(it.title || '')}</h1>` + html; }
+    catch (_) { html = `<p class="err-box">读取文章失败，请检查文件名和格式（支持 .md、.docx、.txt）：<code>${esc(it.file)}</code></p>`; }
   } else html = `<h1>${md(it.title || '')}</h1>${it.summary ? `<p>${md(it.summary)}</p>` : ''}`;
   try { await document.fonts.ready; } catch (_) {}
   if ($('#abody') !== box) return;
