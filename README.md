@@ -67,7 +67,7 @@
 1. 进入 `images` 文件夹 → 右上角 **Add file → Upload files** → 拖入照片 → **Commit changes**
 2. 打开 `content/site.yaml`，把 `photo_sun: ""` 改成 `photo_sun: "images/你的照片名.jpg"`
    （月亮面的照片改 `photo_moon`）
-3. CV 同理：PDF 上传到 `files` 文件夹，在 `site.yaml` 的 links 里把 CV 的 `url` 改成 `"files/cv.pdf"`
+3. CV：在后台“首页”的 CV 栏上传 PDF 就行（会存进 `files` 文件夹），首页的 CV 链接自动指向它
 
 照片建议竖版，宽度 800～1200 像素就够，太大的照片会让网站变慢。文件名尽量用英文和数字。
 

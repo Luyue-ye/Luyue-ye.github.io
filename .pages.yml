@@ -9,6 +9,10 @@ media:
     label: 文章 Writing
     input: content/writing
     output: content/writing
+  - name: files
+    label: 文件 Files（CV 等）
+    input: files
+    output: files
 
 content:
   - name: home
@@ -27,6 +31,12 @@ content:
         type: image
         options:
           media: images
+      - name: cv
+        label: CV（上传 PDF，首页的“CV”链接会自动指向它）
+        type: file
+        options:
+          media: files
+          extensions: [pdf]
       - name: sun
         label: 太阳面首页
         type: object
@@ -40,7 +50,7 @@ content:
             list: true
             fields:
               - { name: label, label: 显示的文字, type: string }
-              - { name: url, label: 网址（CV 上传到 images 后填 images/文件名.pdf；邮箱直接填地址即可）, type: string }
+              - { name: url, label: 网址（邮箱直接填地址；CV 不用填，在上面的 CV 栏上传即可）, type: string }
       - name: moon
         label: 月亮面首页
         type: object
