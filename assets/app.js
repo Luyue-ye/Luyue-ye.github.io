@@ -174,35 +174,47 @@ function mountWaline() {
   }).catch(() => { const w = $('#waline'); if (w) w.innerHTML = '<p class="soon">留言板暂时无法加载 · Echoes could not load</p>'; });
 }
 
-/* 太阳面照片外围：细小的泡泡不断从太阳边缘慢慢飘散出来，越飘越淡，像一圈弥漫的光雾 */
+/* 太阳面照片外围：泡泡从太阳边缘慢慢鼓出来、脱离、飘远；有的轻轻破掉，有的飘走消失 */
 let flareRaf = 0;
 function startFlares() {
   const cv = $('#sflares'); if (!cv) return;
   const ctx = cv.getContext('2d'); let W = 0, R = 0, bubbles = [], last = performance.now();
   const fit = () => { const d = Math.min(2, devicePixelRatio || 1); W = cv.clientWidth; cv.width = W * d; cv.height = W * d; ctx.setTransform(d, 0, 0, d, 0, 0); R = W / 1.6 / 2; };
   fit();
-  const make = (now, age) => ({ a: Math.random() * 6.283, r0: R * (.98 + Math.random() * .04), v: R * (.012 + Math.random() * .016), w: (Math.random() - .5) * .02,
-    ph: Math.random() * 6.283, s: .8 + Math.random() * 2.2, t0: now - (age || 0), life: 7500 + Math.random() * 5000 });
-  for (let i = 0; i < 140; i++) bubbles.push(make(last, Math.random() * 11000));
+  const make = (now, age) => {
+    const big = Math.random(), s = big < .6 ? 1.2 + Math.random() * 1.6 : big < .9 ? 2.8 + Math.random() * 2 : 4.8 + Math.random() * 2.6;
+    const pop = Math.random() < .55;
+    return { a: Math.random() * 6.283, s, v: R * (.01 + Math.random() * .014) * (s > 4 ? .7 : 1), w: (Math.random() - .5) * .018, ph: Math.random() * 6.283,
+      t0: now - (age || 0), grow: 1.4 + Math.random() * 1.2, pop, end: pop ? 3.5 + Math.random() * 5 : 9 + Math.random() * 6 };
+  };
+  for (let i = 0; i < 70; i++) { const b = make(last); b.t0 = last - Math.random() * b.end * 1000; bubbles.push(b); }
+  const ease = k => 1 - Math.pow(1 - k, 3);
   const frame = now => {
     if (cv.clientWidth !== W) fit();
     const dt = Math.min(.05, (now - last) / 1000); last = now;
     const c = W / 2, b = .5 + .5 * Math.sin(now / 1800);
     ctx.clearRect(0, 0, W, W);
-    const g = ctx.createRadialGradient(c, c, R * .95, c, c, R * 1.5); g.addColorStop(0, `rgba(240,196,107,${.24 + .06 * b})`); g.addColorStop(1, 'rgba(240,196,107,0)');
+    const g = ctx.createRadialGradient(c, c, R * .95, c, c, R * 1.5); g.addColorStop(0, `rgba(240,196,107,${.22 + .06 * b})`); g.addColorStop(1, 'rgba(240,196,107,0)');
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c, c, R * 1.5, 0, 6.283); ctx.fill();
     ctx.strokeStyle = 'rgba(214,150,58,.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(c, c, R + 2, 0, 6.283); ctx.stroke();
-    if (!reduce) { let n = dt * 14; while (n > 0) { if (Math.random() < n) bubbles.push(make(now)); n -= 1; } }
-    bubbles = bubbles.filter(p => now - p.t0 < p.life);
+    if (!reduce) { let n = dt * 7; while (n > 0) { if (Math.random() < n) bubbles.push(make(now)); n -= 1; } }
+    bubbles = bubbles.filter(p => (now - p.t0) / 1000 < p.end + .35);
     bubbles.forEach(p => {
-      const age = (now - p.t0) / 1000, k = (now - p.t0) / p.life;
-      const r = p.r0 + p.v * age, ang = p.a + p.w * age + Math.sin(age * .55 + p.ph) * .015;
-      const x = c + r * Math.cos(ang), y = c + r * Math.sin(ang);
-      const al = Math.min(1, k * 5) * Math.pow(1 - k, 1.4), rad = p.s * (1 + k * .6);
-      ctx.strokeStyle = `rgba(214,150,58,${(.5 * al).toFixed(3)})`; ctx.lineWidth = .6;
-      ctx.fillStyle = `rgba(255,240,205,${(.55 * al).toFixed(3)})`;
+      const age = (now - p.t0) / 1000, gk = Math.min(1, age / p.grow), rad = p.s * ease(gk);
+      const drift = Math.max(0, age - p.grow * .6), r = R + 1 + rad + p.v * drift * (p.pop ? 1 : 1 + drift * .06);
+      const ang = p.a + p.w * drift + Math.sin(age * .5 + p.ph) * .012, x = c + r * Math.cos(ang), y = c + r * Math.sin(ang);
+      if (age > p.end) { /* 破掉：一圈很快散开的细环和几滴小水珠 */
+        if (!p.pop) return;
+        const q = (age - p.end) / .35, al = (1 - q) * .55;
+        ctx.strokeStyle = `rgba(214,150,58,${al.toFixed(3)})`; ctx.lineWidth = .5; ctx.beginPath(); ctx.arc(x, y, rad * (1 + q * .9), 0, 6.283); ctx.stroke();
+        ctx.fillStyle = `rgba(240,196,107,${al.toFixed(3)})`;
+        for (let d = 0; d < 4; d++) { const da = p.ph + d * 1.57; ctx.beginPath(); ctx.arc(x + Math.cos(da) * rad * (1.2 + q * 1.4), y + Math.sin(da) * rad * (1.2 + q * 1.4), .6, 0, 6.283); ctx.fill(); }
+        return;
+      }
+      const fade = p.pop ? 1 : Math.min(1, (p.end - age) / 3), al = Math.min(1, age / .8) * fade;
+      ctx.fillStyle = `rgba(255,244,215,${(.12 * al).toFixed(3)})`; ctx.strokeStyle = `rgba(214,150,58,${(.38 * al).toFixed(3)})`; ctx.lineWidth = .55;
       ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.283); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = `rgba(255,255,255,${(.7 * al).toFixed(3)})`; ctx.beginPath(); ctx.arc(x - rad * .35, y - rad * .35, rad * .3, 0, 6.283); ctx.fill();
+      if (rad > 1.5) { ctx.strokeStyle = `rgba(255,255,255,${(.55 * al).toFixed(3)})`; ctx.lineWidth = .6; ctx.beginPath(); ctx.arc(x, y, rad * .65, 3.6, 4.6); ctx.stroke(); }
     });
     if (!reduce) flareRaf = requestAnimationFrame(frame);
   };
