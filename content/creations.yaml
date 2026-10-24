@@ -23,8 +23,8 @@ categories:
     title: "Fiction"
     star: "Spica"
     items:
-      - title: "《篇名》"
-        label: "短篇小说 · 获奖作品（示例）"
+      - title: "最后的倒计时"
+        label: "短篇小说 · 深圳市读书月短篇小说大赛全国第二名"
         file: "content/writing/creations/example.md"
       - title: "《篇名二》（示例）"
         summary: "作品简介或开头几段。"
