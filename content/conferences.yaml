@@ -19,9 +19,9 @@ groups:
 
   - title: "2026"
     items:
-      - when: "Nov 2026"
-        title: "（示例）Paper title"
-        text: "National Communication Association (NCA) Annual Convention · New Orleans, LA"
       - when: "2026"
         title: "（示例）Paper title"
+        text: "National Communication Association (NCA) Annual Convention · New Orleans, LA"
+      - when: "Sep 2026"
+        title: "Leaving the Lowland:Collective resistance to authoritarian narratives and the reproduction of suzhi ideology in Chinese digital migration discourse"
         text: "European Communication Conference (ECC) · Brno, Czech Republic"
