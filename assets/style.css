@@ -216,3 +216,16 @@ html.cc-on .cc-ring.press{width:22px;height:22px;margin:-11px 0 0 -11px}
 html.cc-text .cc-dot,html.cc-text .cc-ring{opacity:0!important}
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* 首页照片：太阳面圆形，月亮面月牙（右上角被一层薄纱遮住） */
+.pframe{position:relative;width:100%;aspect-ratio:1/1;border-radius:50%;justify-self:center}
+.pframe .photo{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:50%;object-fit:cover}
+.pframe.sunp{box-shadow:0 0 0 1px rgba(184,134,46,.45),0 0 0 9px rgba(240,196,107,.12),0 0 40px rgba(240,196,107,.25)}
+.pframe.moonp{overflow:hidden;box-shadow:0 0 0 1px rgba(236,232,221,.18),0 0 50px rgba(236,232,221,.08)}
+.veil{position:absolute;top:-20%;right:-20%;width:92%;height:92%;border-radius:50%;pointer-events:none;
+  background:repeating-linear-gradient(30deg,rgba(236,232,221,.025) 0 1px,transparent 1px 3px),
+  radial-gradient(circle at 46% 54%,rgba(30,36,54,.72) 0 40%,rgba(30,36,54,.55) 55%,rgba(30,36,54,.28) 66%,rgba(30,36,54,0) 76%),
+  radial-gradient(circle at 30% 70%,rgba(236,232,221,.10),transparent 60%);
+  -webkit-backdrop-filter:blur(3px) saturate(.7);backdrop-filter:blur(3px) saturate(.7);
+  -webkit-mask:radial-gradient(circle,#000 40%,rgba(0,0,0,.75) 56%,rgba(0,0,0,.3) 68%,transparent 76%);mask:radial-gradient(circle,#000 40%,rgba(0,0,0,.75) 56%,rgba(0,0,0,.3) 68%,transparent 76%)}
+@media (max-width:640px){.pframe{width:220px}}

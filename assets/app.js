@@ -32,7 +32,7 @@ function homeSun() {
   const site = C.site || {}, s = site.sun || {};
   const fixUrl = u => { u = String(u || '').trim(); return /^[^\s@:/]+@[^\s@/]+\.[^\s@/]+$/.test(u) ? 'mailto:' + u : u; }; /* 只写了邮箱地址时，自动变成发邮件的链接 */
   const links = arr(s.links).map(l => { const u = fixUrl(l.url) || (/\bcv\b/i.test(l.label || '') && site.cv ? site.cv : ''); return u ? `<a href="${esc(u)}"${linkAttrs(u)}>${esc(l.label)}</a>` : `<span>${esc(l.label)}</span>`; }).join('');
-  return errBox('site') + `<section class="home">${photo(site.photo_sun, '照片<br>Photo')}<div class="intro">
+  return errBox('site') + `<section class="home"><div class="pframe sunp">${photo(site.photo_sun, '照片<br>Photo')}</div><div class="intro">
     ${s.hello ? `<p class="hi">${md(s.hello)}</p>` : ''}
     ${arr(s.paragraphs).map(p => `<p>${md(p)}</p>`).join('')}
     ${s.zh ? `<p class="zh-line">${md(s.zh)}</p>` : ''}
@@ -41,7 +41,7 @@ function homeSun() {
 function homeMoon() {
   const site = C.site || {}, m = site.moon || {};
   return errBox('site') + (m.title ? `<p class="moon-title">${md(m.title)}</p>` : '') +
-    `<section class="home">${photo(site.photo_moon, '生活照<br>Photo')}<div class="intro"><div class="poem">
+    `<section class="home"><div class="pframe moonp">${photo(site.photo_moon, '生活照<br>Photo')}<span class="veil" aria-hidden="true"></span></div><div class="intro"><div class="poem">
     <div>${arr(m.zh_lines).map(l => `<p>${md(l)}</p>`).join('')}</div>
     <div class="en">${arr(m.en_lines).map(l => `<p>${md(l)}</p>`).join('')}</div></div></div></section>`;
 }
