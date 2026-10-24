@@ -22,6 +22,8 @@ regions:
     en: United States
   - name: 泰国
     en: Thailand
+  - name: 英国
+    en: Britain
 places:
   - name: 顺德
     en: Shunde
