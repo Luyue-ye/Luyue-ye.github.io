@@ -20,6 +20,8 @@ regions:
     en: Qatar
   - name: 美国
     en: United States
+  - name: 泰国
+    en: Thailand
 places:
   - name: 顺德
     en: Shunde
