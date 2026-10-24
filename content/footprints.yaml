@@ -193,3 +193,8 @@ places:
     region: 泰国
     coords: 13.45, 100.31
     home: false
+  - name: 清迈
+    en: Chiangmai
+    region: 泰国
+    coords: 18.78, 98.98
+    home: false
