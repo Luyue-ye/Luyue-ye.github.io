@@ -1,41 +1,36 @@
-# ─────────────────────────────────────────────
-# ☀️ Focus · 研究
-# 结构：groups（分组）→ items（条目）
-# 每个条目可以写：
-#   when:  左边的小字（年份、状态等）
-#   title: 标题
-#   text:  一两句说明
-#   link:  可选，点标题会跳到这个网址
-# 想加一条：复制一段 "- when: ..." 到 text 那几行，注意缩进对齐
-# ─────────────────────────────────────────────
-intro: ""
 groups:
-  - title: "Main threads"
-    zh: "主要方向"
+  - title: Main threads
+    zh: 主要方向
     items:
-      - when: "Thread"
-        title: "Diaspora media and exiled critical voices"
-        text: "（示例）A few sentences on how exiled critics from China use media to reach audiences abroad."
-      - when: "Thread"
-        title: "The transnational public sphere"
-        text: "（示例）A few sentences on how these voices connect audiences across borders."
-      - when: "Thread"
-        title: "Cyberpolitics"
-        text: "（示例）A few sentences on digital platforms and online political talk."
-
-  - title: "Exploring"
-    zh: "正在探索"
+      - when: Thread
+        title: Diaspora media and exiled critical voices
+        text: I care about the reasons of critical voices exile from China and what do
+          they do overseas and how do they impact host countries and how do you
+          present themselves.
+      - when: Thread
+        title: The transnational public sphere
+        text: Material transnational public sphere, a specific case--Jifeng Books in
+          Washinton D.C.
+      - when: Thread
+        title: Cyberpolitics
+        text: Political discourse regarding Chinese issues online.
+  - title: Exploring
+    zh: 正在探索
     items:
-      - when: "New"
-        title: "Chinese feminist media"
-        text: "（示例）One or two sentences on what you are starting to look at."
-      - when: "New"
-        title: "China's green soft power in the Nordic countries"
-        text: "（示例）One or two sentences on what you are starting to look at."
-
-  - title: "Dissertation"
-    zh: "博士论文"
+      - when: New
+        title: Chinese feminist media
+        text: Representation of female characters in Chinese video games.
+      - when: New
+        title: China's green soft power in the Nordic countries
+        text: (Thoughs are developing...)
+      - when: New
+        title: China's image-making and Ontological Security
+        text: Is China's global image-making project related or driven by their
+          ontological security needs? Is "telling good Chinese story" an
+          essential part of Chinese identity?
+  - title: Dissertation
+    zh: 博士论文
     items:
-      - when: "In progress"
-        title: "（示例）Dissertation title"
-        text: "（示例）A short abstract of the dissertation project."
+      - when: In progress
+        title: （示例）Dissertation title
+        text: （示例）A short abstract of the dissertation project.
