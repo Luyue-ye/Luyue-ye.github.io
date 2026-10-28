@@ -21,8 +21,3 @@ groups:
       - when: Year
         title: GSU Commentary Podcast Director
         text: Participating in planning programs, recording programs.
-  - title: CV
-    items:
-      - when: PDF
-        title: Curriculum vitae
-        text: （示例）把 CV 上传到 files 文件夹后，在下面 link 里填 files/文件名.pdf
