@@ -4,9 +4,7 @@ items:
     summary: Happy
     body: Claude好厉害，这都是它帮我做的！
     file: content/writing/ideas/example.md
-  - date: 2026 · 09
-    title: （示例）读书笔记
-    summary: 可以写最近读的书，也可以写某个念头。
-  - date: 2026 · 08
-    title: （示例）Essay title
-    summary: Short essays can be in Chinese, English, or both.
+  - date: 2026.10.28
+    title: 困，饿，上课，想Magnus
+    summary: 如题
+    body: 好饿，好困，还在上课。好想Magnus，呜呜呜。
