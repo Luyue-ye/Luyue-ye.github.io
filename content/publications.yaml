@@ -1,29 +1,20 @@
-# ─────────────────────────────────────────────
-# ☀️ Publications · 发表
-#   when:  年份
-#   title: 文章题目（书名、期刊名可以用 *斜体*）
-#   text:  期刊信息、作者等
-#   link:  可选，文章链接（DOI 等）
-# ─────────────────────────────────────────────
-intro: ""
+intro: I don't have any publications right now...Let's wait...
 groups:
-  - title: "Published"
-    zh: "已发表"
+  - title: Published
+    zh: 已发表
     items:
-      - when: "Year"
-        title: "（示例）Article title"
-        text: "Journal name, volume(issue), pages."
-
-  - title: "Under review"
-    zh: "在审"
+      - when: Year
+        title: Waiting,,.
+        text: Journal name, volume(issue), pages.
+  - title: Under review
+    zh: 在审
     items:
-      - when: "Year"
-        title: "（示例）Article title"
-        text: "Submitted to journal name"
-
-  - title: "In progress"
-    zh: "写作中"
+      - when: Year
+        title: Waiting...
+        text: Submitted to journal name
+  - title: In progress
+    zh: 写作中
     items:
-      - when: "Year"
+      - when: Year
         title: "Book review: Rongbin Han, *Make China Great Again*"
-        text: "（示例）Book review in preparation"
+        text: Polishing....
