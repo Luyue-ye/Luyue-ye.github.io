@@ -29,6 +29,16 @@ regions:
   - name: 新加坡
     en: Singapore
 places:
+  - name: 厦门
+    en: Xiamen
+    region: 中国
+    coords: 24.48, 118.09
+    home: false
+  - name: 三亚
+    en: Sanya
+    region: 中国
+    coords: 18.25, 109.51
+    home: false
   - name: 顺德
     en: Shunde
     region: 中国
