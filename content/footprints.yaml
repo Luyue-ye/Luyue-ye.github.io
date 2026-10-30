@@ -187,6 +187,11 @@ places:
     region: 卡塔尔
     coords: 25.29, 51.53
     home: false
+  - name: 洛杉矶
+    en: Los Angeles
+    region: 美国
+    coords: 34.05, -118.24
+    home: false
   - name: 丹佛
     en: Denver
     region: 美国
