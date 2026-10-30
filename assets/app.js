@@ -52,6 +52,44 @@ function listSection(key, i) {
       <h3>${it.link ? `<a href="${esc(it.link)}"${linkAttrs(it.link)}>${md(it.title)}</a>` : md(it.title)}</h3>
       ${it.text ? `<div class="meta">${md(it.text)}</div>` : ''}</div></div>`).join('')}</div>`).join('');
 }
+/* 会议页的第二个分页：投稿追踪。链接用密码加密保存，网页源码里看不到原链接；输入正确的密码才会解密并跳转。
+   换密码或换链接：请让 Claude 重新生成下面 LOCK 里的三段数据。 */
+const LOCK = { salt: '__SALT__', iv: '__IV__', ct: '__CT__', iter: 250000 };
+let confTab = 0;
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function unlockUrl(code) {
+  const enc = new TextEncoder();
+  const base = await crypto.subtle.importKey('raw', enc.encode(code), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(LOCK.salt), iterations: LOCK.iter, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const out = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(LOCK.iv) }, key, b64(LOCK.ct));
+  return new TextDecoder().decode(out);
+}
+function conferencesPage() {
+  const tabs = `<div class="ctabs" role="tablist" aria-label="Conferences">
+    <button role="tab" data-ctab="0" aria-selected="${confTab === 0}">Presentations <span class="zh">我的报告</span></button>
+    <button role="tab" data-ctab="1" aria-selected="${confTab === 1}">Submission Tracker <span class="zh">投稿追踪</span> <span aria-hidden="true">⚿</span></button></div>`;
+  if (confTab === 0) return head(1) + tabs + listSection('conferences', 1).slice(head(1).length);
+  return head(1) + tabs + `<form class="lockbox" id="lockform" autocomplete="off">
+    <p class="lk-t">这一页需要密码 · This page needs a code</p>
+    <label class="sr-only" for="lockcode">密码 Code</label>
+    <div class="lk-row"><input id="lockcode" type="password" inputmode="text" placeholder="输入密码 · Enter code" required>
+    <button type="submit">进入 · Enter →</button></div>
+    <p class="lk-msg" id="lockmsg" role="status" aria-live="polite"></p></form>`;
+}
+function bindConferences(m) {
+  m.querySelectorAll('[data-ctab]').forEach(b => (b.onclick = () => { confTab = +b.dataset.ctab; render(); if (confTab === 1) { const i = $('#lockcode'); if (i) i.focus(); } }));
+  const f = m.querySelector('#lockform');
+  if (!f) return;
+  f.onsubmit = async e => {
+    e.preventDefault();
+    const code = $('#lockcode').value.trim(), msg = $('#lockmsg'), btn = f.querySelector('button');
+    if (!code) return;
+    btn.disabled = true; msg.textContent = '…';
+    try { const url = await unlockUrl(code); msg.textContent = '正在跳转 · Opening…'; location.assign(url); }
+    catch (_) { msg.textContent = '密码不对，请再试一次 · Wrong code, try again'; $('#lockcode').select(); }
+    finally { btn.disabled = false; }
+  };
+}
 const slugOf = f => String(f || '').split('/').pop().replace(/\.(md|markdown|docx|txt)$/i, '');
 /* 每篇文章的网址代号：有文件用文件名，否则用标题 */
 const itemSlug = (it, i) => String(it.slug || (it.file ? slugOf(it.file) : String(it.title || '').replace(/[*《》「」"'?#/\\\s]+/g, '').slice(0, 40)) || 'n' + (i + 1));
@@ -247,7 +285,7 @@ function render() {
   if (wl) { try { wl.destroy(); } catch (_) {} wl = null; }
   const m = $('#main');
   if (!loaded) { m.innerHTML = ''; return; }
-  const P = { sun: [() => listSection('focus', 0), () => listSection('conferences', 1), () => listSection('publications', 2), () => listSection('teaching', 3)],
+  const P = { sun: [() => listSection('focus', 0), conferencesPage, () => listSection('publications', 2), () => listSection('teaching', 3)],
               moon: [ideasPage, footprintsPage, creationsPage, echoesPage] };
   const inner = reading ? readerPage() : view < 0 ? (mode === 'sun' ? homeSun() : homeMoon()) : P[mode][view]();
   const showBar = view >= 0 || reading || depth > 0;
@@ -258,6 +296,7 @@ function render() {
     const tries = [...new Set([ext, ext.toLowerCase(), ext.toUpperCase(), '.jpg', '.JPG', '.jpeg', '.png', '.PNG'].map(e => 'images/' + stem + e))].filter(u => u !== src);
     img.onerror = () => { const next = tries.shift(); if (next) { img.src = next; return; } const d = document.createElement('div'); d.className = 'photo ph'; d.innerHTML = img.dataset.ph; img.replaceWith(d); };
   });
+  bindConferences(m);
   m.querySelectorAll('[data-home]').forEach(b => (b.onclick = () => go(-1, b)));
   m.querySelectorAll('[data-sec]').forEach(b => (b.onclick = () => go(+b.dataset.sec, b, true)));
   m.querySelectorAll('[data-goback]').forEach(b => (b.onclick = goBack));
