@@ -54,7 +54,7 @@ function listSection(key, i) {
 }
 /* 会议页的第二个分页：投稿追踪。链接用密码加密保存，网页源码里看不到原链接；输入正确的密码才会解密并跳转。
    换密码或换链接：请让 Claude 重新生成下面 LOCK 里的三段数据。 */
-const LOCK = { salt: '__SALT__', iv: '__IV__', ct: '__CT__', iter: 250000 };
+const LOCK = { salt: 'r5yuh+XUOtNKmTaTL+XyNw==', iv: 'mswGmWEvQ1+XD3/9', ct: 'JJE4gV0bgsvK6dA1Vb5vOhxGUXKrw0PwBznw2XDhrTMoMgRYaVZ5ky6vA4mZ2wZSYAExCamvyCDKOIuTnpE21D0=', iter: 250000 };
 let confTab = 0;
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 async function unlockUrl(code) {
